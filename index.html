@@ -5,107 +5,115 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ArticlePress</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL="https://tophvdcznopyqwzzzghi.supabase.co";
 const SUPA_KEY="sb_publishable_2i-R1PGEdnbtnxEJL8p5Sw_IJXUypOr";
 const db=supabase.createClient(SUPA_URL,SUPA_KEY);
 </script>
-
 <style>
-
-:root{
-  --dark:#1a1a1a;
-  --mid:#4a4a4a;
-  --light:#888;
-  --cream:#f5f3f0;
-  --white:#ffffff;
-  --accent:#c8a96e;
-  --border:#e8e6e3;
-}
+:root{--dark:#1a1a1a;--mid:#4a4a4a;--light:#888;--cream:#f5f3f0;--accent:#c8a96e;--border:#e8e6e3;}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
 a{text-decoration:none;color:inherit}
 
-nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+/* NAV */
+nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 30px rgba(0,0,0,0.4)}
 .logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
 .logo span{color:var(--accent)}
-.nav-links a{color:rgba(255,255,255,0.75);font-size:0.95rem;margin-left:28px;transition:color 0.2s}
-.nav-links a:hover{color:#fff}
-.btn-nav{background:var(--accent);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-left:20px;transition:all 0.2s}
-.btn-nav:hover{background:#b8933e;transform:translateY(-1px)}
-.hero{background:linear-gradient(135deg,#1a1a1a 0%,#2c2c2c 60%,#3a3020 100%);color:#fff;padding:80px 40px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
-.hero-tag{display:inline-block;background:var(--accent);color:#fff;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;padding:5px 14px;border-radius:3px;margin-bottom:20px}
-.hero h1{font-family:'Libre Baskerville',serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:700;margin-bottom:16px;line-height:1.15}
-.hero p{font-size:1.2rem;color:rgba(255,255,255,0.65);max-width:600px;margin:0 auto 36px;font-style:italic}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-write-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(200,169,110,0.14);color:var(--accent);border:1.5px solid rgba(200,169,110,0.35);border-radius:7px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.2s}
+.nav-write-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,110,0.3)}
+.nav-divider{width:1px;height:22px;background:rgba(255,255,255,0.1);margin:0 6px}
+.nav-profile-btn{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,0.82);font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:7px 14px 7px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s}
+.nav-profile-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:#fff}
+.nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)}
+.nav-avatar img{width:100%;height:100%;object-fit:cover}
+.btn-logout{background:transparent;color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.09);border-radius:7px;padding:8px 14px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.05)}
+.btn-login-nav{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s}
+.btn-login-nav:hover{background:#b8933e;transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,110,0.35)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1a1a 0%,#2c2c2c 60%,#3a3020 100%);color:#fff;padding:110px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.hero-inner{position:relative;z-index:1;animation:fadeUp 0.8s cubic-bezier(.22,.68,0,1.2) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{display:inline-block;background:rgba(200,169,110,0.15);color:var(--accent);font-family:'Libre Baskerville',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:3.5px;padding:7px 18px;border-radius:20px;margin-bottom:26px;border:1px solid rgba(200,169,110,0.28)}
+.hero h1{font-family:'Libre Baskerville',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:700;margin-bottom:20px;line-height:1.08;letter-spacing:-1px}
+.hero p{font-size:1.2rem;color:rgba(255,255,255,0.58);max-width:500px;margin:0 auto 48px;font-style:italic;line-height:1.75}
 .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
-.btn-hero{padding:14px 32px;border-radius:6px;font-family:'Libre Baskerville',serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s;border:none}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:#b8933e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,169,110,0.4)}
-.btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.4)}
-.btn-secondary:hover{border-color:#fff;background:rgba(255,255,255,0.05)}
-.section{max-width:1200px;margin:0 auto;padding:60px 40px}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.btn-hero-primary{display:inline-block;padding:17px 42px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:all 0.25s;box-shadow:0 4px 24px rgba(200,169,110,0.35)}
+.btn-hero-primary:hover{background:#b8933e;transform:translateY(-3px);box-shadow:0 14px 40px rgba(200,169,110,0.45)}
+.btn-hero-secondary{display:inline-block;padding:17px 42px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.88rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;background:transparent;color:rgba(255,255,255,0.85);border:2px solid rgba(255,255,255,0.28);cursor:pointer;transition:all 0.25s}
+.btn-hero-secondary:hover{border-color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.06);transform:translateY(-3px)}
+
+/* ARTICLES */
+.section{max-width:1200px;margin:0 auto;padding:70px 40px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:44px;padding-bottom:18px;border-bottom:2px solid var(--border)}
 .section-header h2{font-family:'Libre Baskerville',serif;font-size:1.5rem;font-weight:700}
 .section-header span{font-size:0.9rem;color:var(--light)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px}
-.article-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s;cursor:pointer}
-.article-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12)}
-.card-img{width:100%;height:200px;object-fit:cover;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center}
-.card-img img{width:100%;height:100%;object-fit:cover}
-.card-img-placeholder{width:80px;height:80px;border-radius:50%;background:#e8e6e3;display:flex;align-items:center;justify-content:center;font-size:2rem}
-.card-body{padding:24px}
-.card-meta{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.author-avatar{width:32px;height:32px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;overflow:hidden;flex-shrink:0}
+.article-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.07);transition:all 0.35s cubic-bezier(.22,.68,0,1.2);cursor:pointer;opacity:0;animation:fadeUp 0.55s cubic-bezier(.22,.68,0,1.2) forwards}
+.article-card:hover{transform:translateY(-7px);box-shadow:0 22px 55px rgba(0,0,0,0.13)}
+.card-img{width:100%;height:210px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.45s}
+.article-card:hover .card-img img{transform:scale(1.05)}
+.card-img-placeholder{width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;font-size:1.8rem}
+.card-body{padding:26px}
+.card-meta{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.author-avatar{width:34px;height:34px;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Libre Baskerville',serif;font-size:0.72rem;font-weight:700;overflow:hidden;flex-shrink:0}
 .author-avatar img{width:100%;height:100%;object-fit:cover}
-.author-info-card{flex:1;min-width:0}
-.author-name-card{font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.author-name-card{font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700}
 .article-date{font-size:0.8rem;color:var(--light)}
-.card-content{font-size:1rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.card-footer{padding:0 24px 20px;border-top:1px solid var(--border);margin-top:16px;padding-top:16px}
-.read-more{font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark);display:inline-flex;align-items:center;gap:6px;transition:gap 0.2s}
+.card-content{font-size:1.02rem;color:var(--mid);line-height:1.7;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{padding:16px 26px 22px;border-top:1px solid var(--border);margin-top:14px}
+.read-more{font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark);display:inline-flex;align-items:center;gap:6px;transition:gap 0.2s}
 .read-more:hover{gap:12px}
 .empty-state{text-align:center;padding:80px 20px;color:var(--light)}
 .empty-state h3{font-family:'Libre Baskerville',serif;font-size:1.3rem;margin-bottom:12px;color:var(--mid)}
 .loader{text-align:center;padding:60px;color:var(--light);font-style:italic}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.74);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:12px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
-.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--mid);z-index:10}
-.modal-header{background:var(--dark);padding:24px 30px;border-radius:12px 12px 0 0}
+.modal{background:#fff;border-radius:14px;max-width:820px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:fadeUp 0.3s ease}
+.modal-close{position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.12);border:none;width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;color:#fff;z-index:10;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,0.25);transform:scale(1.1)}
+.modal-header{background:var(--dark);padding:26px 32px;border-radius:14px 14px 0 0}
 .modal-date{font-family:'Libre Baskerville',serif;font-size:1rem;letter-spacing:2px;text-transform:uppercase;color:#fff}
-.modal-body{display:flex;gap:30px;padding:30px}
+.modal-body{display:flex;gap:32px;padding:32px}
 .modal-sidebar{flex:0 0 180px;text-align:center}
 .modal-avatar{width:130px;height:130px;border-radius:50%;object-fit:cover;border:4px solid var(--border);margin-bottom:14px}
 .modal-author{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;margin-bottom:6px}
-.modal-title-role{font-size:0.9rem;color:var(--light)}
-.modal-link{display:inline-block;margin-top:12px;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark);border-bottom:2px solid var(--dark);padding-bottom:2px}
-.modal-content{flex:1;font-size:1.1rem;line-height:1.9;white-space:pre-wrap;color:var(--dark)}
-footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:30px;font-size:0.9rem;margin-top:60px}
+.modal-role{font-size:0.9rem;color:var(--light);font-style:italic}
+.modal-link{display:inline-block;margin-top:16px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--dark);border-bottom:2px solid var(--dark);padding-bottom:2px;transition:all 0.2s}
+.modal-link:hover{color:var(--accent);border-color:var(--accent)}
+.modal-content{flex:1;font-size:1.1rem;line-height:1.95;white-space:pre-wrap;color:var(--dark)}
+
+footer{background:var(--dark);color:rgba(255,255,255,0.4);text-align:center;padding:36px;font-size:0.9rem;margin-top:60px}
 footer span{color:var(--accent)}
-@media(max-width:640px){.section{padding:40px 20px}.hero{padding:60px 20px}.modal-body{flex-direction:column}.modal-sidebar{flex:none}}
+@media(max-width:640px){.section{padding:40px 20px}.hero{padding:70px 20px}.modal-body{flex-direction:column}.modal-sidebar{flex:none}.nav-divider{display:none}}
 </style>
 </head>
 <body>
-<nav id="navbar">
+
+<nav>
   <a href="index.html" class="logo">Article<span>Press</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="editor.html" id="navWrite" style="display:none">Ecrire</a>
-    <a href="#" id="navProfile" style="display:none"></a>
-    <a href="auth.html" id="navLogin">Connexion</a>
-    <button class="btn-nav" id="navLogout" style="display:none" onclick="logout()">Deconnexion</button>
+  <div class="nav-right" id="navRight">
+    <a href="auth.html" class="btn-login-nav">Connexion</a>
   </div>
 </nav>
 
 <div class="hero">
-  <div class="hero-tag">Plateforme editoriale</div>
-  <h1>ArticlePress</h1>
-  <p>La plateforme pour ecrire, publier et partager vos articles avec le monde.</p>
-  <div class="hero-btns">
-    <a href="editor.html" class="btn-hero btn-primary">Ecrire un article</a>
-    <a href="auth.html" class="btn-hero btn-secondary" id="heroLogin">Rejoindre</a>
+  <div class="hero-inner">
+    <div class="hero-tag">Plateforme editoriale</div>
+    <h1>ArticlePress</h1>
+    <p>La plateforme pour ecrire, publier et partager vos articles avec le monde.</p>
+    <div class="hero-btns">
+      <a href="editor.html" class="btn-hero-primary">Ecrire un article</a>
+      <a href="auth.html" class="btn-hero-secondary" id="heroJoin">Rejoindre</a>
+    </div>
   </div>
 </div>
 
@@ -121,47 +129,44 @@ footer span{color:var(--accent)}
 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
-    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">x</button>
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''">✕</button>
     <div class="modal-header"><div class="modal-date" id="modalDate"></div></div>
     <div class="modal-body">
       <div class="modal-sidebar">
-        <img id="modalAvatar" class="modal-avatar" src="" alt="">
+        <img id="modalAvatar" class="modal-avatar" src="" alt="" style="display:none">
         <div class="modal-author" id="modalAuthor"></div>
-        <div class="modal-title-role" id="modalRole"></div>
-        <a href="#" class="modal-link" id="modalProfileLink">Voir le profil</a>
+        <div class="modal-role" id="modalRole"></div>
+        <a href="#" class="modal-link" id="modalProfileLink">Voir le profil →</a>
       </div>
       <div class="modal-content" id="modalContent"></div>
     </div>
   </div>
 </div>
 
-<footer>
-  <p><span>ArticlePress</span> &mdash; Plateforme editoriale libre &mdash; 2024</p>
-</footer>
+<footer><p><span>ArticlePress</span> &mdash; Plateforme editoriale libre &mdash; 2024</p></footer>
 
 <script>
-
 async function initNav(){
   const{data:{session}}=await db.auth.getSession();
+  const navRight=document.getElementById('navRight');
   if(session){
-    document.getElementById('navLogin').style.display='none';
-    document.getElementById('navWrite').style.display='inline';
-    document.getElementById('navLogout').style.display='inline';
-    const{data:profile}=await db.from('profiles').select('username').eq('id',session.user.id).single();
-    if(profile){
-      const a=document.getElementById('navProfile');
-      a.href='profile.html?user='+profile.username;
-      a.style.display='inline';
-      a.textContent=profile.username;
-    }
+    document.getElementById('heroJoin').style.display='none';
+    const{data:profile}=await db.from('profiles').select('username,avatar_url').eq('id',session.user.id).single();
+    const uname=profile?profile.username:'profil';
+    const av=profile&&profile.avatar_url;
+    const avatarHtml=av
+      ?`<div class="nav-avatar"><img src="${av}" alt=""></div>`
+      :`<div class="nav-avatar">${uname[0].toUpperCase()}</div>`;
+    navRight.innerHTML=`
+      <a href="editor.html" class="nav-write-btn">✏&nbsp;Ecrire</a>
+      <div class="nav-divider"></div>
+      <a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a>
+      <button class="btn-logout" onclick="logout()">Deconnexion</button>
+    `;
   }
 }
-async function logout(){
-  await db.auth.signOut();
-  window.location.href='index.html';
-}
+async function logout(){await db.auth.signOut();window.location.reload();}
 initNav();
-
 
 async function loadArticles(){
   const grid=document.getElementById('articlesGrid');
@@ -171,21 +176,17 @@ async function loadArticles(){
     return;
   }
   document.getElementById('articleCount').textContent=articles.length+' article'+(articles.length>1?'s':'');
-  grid.innerHTML=articles.map(a=>{
+  grid.innerHTML=articles.map((a,i)=>{
     const preview=a.content?a.content.substring(0,200)+'...':'';
     const initials=a.author_name?a.author_name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase():'?';
     const avatarHtml=a.image_data?`<img src="${a.image_data}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<span>${initials}</span>`;
-    return `<div class="article-card" onclick="openArticle(${JSON.stringify(a).replace(/"/g,'&quot;')})">
-      <div class="card-img" style="background:linear-gradient(135deg,#e8e6e3,#d0ccc7)">
-        ${a.image_data?`<img src="${a.image_data}" style="width:100%;height:100%;object-fit:cover">`:'<div class="card-img-placeholder">📰</div>'}
-      </div>
+    const safeA=JSON.stringify(a).replace(/"/g,'&quot;');
+    return `<div class="article-card" style="animation-delay:${i*0.08}s" onclick="openArticle(${safeA})">
+      <div class="card-img">${a.image_data?`<img src="${a.image_data}" alt="">`:'<div class="card-img-placeholder">📰</div>'}</div>
       <div class="card-body">
         <div class="card-meta">
           <div class="author-avatar">${avatarHtml}</div>
-          <div class="author-info-card">
-            <div class="author-name-card">${a.author_name||'Auteur'}</div>
-            <div class="article-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
-          </div>
+          <div><div class="author-name-card">${a.author_name||'Auteur'}</div><div class="article-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div></div>
         </div>
         <div class="card-content">${preview}</div>
       </div>
@@ -200,29 +201,18 @@ function openArticle(a){
   document.getElementById('modalAuthor').textContent=a.author_name||'Auteur';
   document.getElementById('modalRole').textContent=a.author_title||'';
   document.getElementById('modalContent').textContent=a.content||'';
-  const avatar=document.getElementById('modalAvatar');
-  if(a.image_data){avatar.src=a.image_data;avatar.style.display='block';}
-  else{avatar.style.display='none';}
-  if(a.profiles&&a.profiles.username){
-    document.getElementById('modalProfileLink').href='profile.html?user='+a.profiles.username;
-  }
+  const av=document.getElementById('modalAvatar');
+  if(a.image_data){av.src=a.image_data;av.style.display='block';}else{av.style.display='none';}
+  if(a.profiles&&a.profiles.username)document.getElementById('modalProfileLink').href='profile.html?user='+a.profiles.username;
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-
 function closeModal(e){
   if(e.target===document.getElementById('modalOverlay')){
     document.getElementById('modalOverlay').classList.remove('open');
     document.body.style.overflow='';
   }
 }
-
-db.auth.getSession().then(async({data:{session}})=>{
-  if(session){
-    document.getElementById('heroLogin').style.display='none';
-  }
-});
-
 loadArticles();
 </script>
 </body>
