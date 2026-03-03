@@ -178,7 +178,6 @@ nav{
   flex:1;display:none;flex-direction:column;
   padding:24px 32px 32px;
   min-height:0;
-  height:calc(100vh - 68px);
 }
 
 .article-container{
@@ -188,7 +187,6 @@ nav{
   overflow:hidden;
   animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) both;
   min-height:0;
-  height:100%;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
@@ -270,8 +268,7 @@ nav{
   padding:36px 44px;
   font-family:'Crimson Text',serif;font-size:1.15rem;line-height:1.95;
   resize:none;color:var(--dark);background:transparent;
-  min-height:0;
-  height:100%;
+  min-height:500px;
   transition:background 0.2s;
 }
 .article-textarea:focus{outline:none;background:rgba(200,169,110,0.015)}
@@ -466,7 +463,7 @@ async function init(){
 
   // Show editor + toolbar
   const em=document.getElementById('editorMain');
-  em.style.cssText='flex:1;display:flex;flex-direction:column;padding:24px 32px 32px;min-height:0;height:calc(100vh - 68px)';
+  em.style.cssText='flex:1;display:flex;flex-direction:column;padding:24px 32px 32px;min-height:0';
   document.getElementById('navActions').style.display='flex';
 
   // Load profile → auto-fill name, title, avatar
