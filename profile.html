@@ -47,21 +47,21 @@ nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:c
 .banner-no-edit{cursor:default!important}
 .banner-no-edit .banner-overlay{display:none!important}
 .profile-info-row{position:absolute;bottom:0;left:0;right:0;padding:0 56px 32px;display:flex;align-items:flex-end;gap:28px;z-index:4}
-.avatar-zone{position:relative;flex-shrink:0;cursor:pointer}
+.avatar-zone{position:relative;flex-shrink:0;cursor:pointer;border-radius:50%;}
 .profile-avatar{width:136px;height:136px;border-radius:50%;border:4px solid #fff;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.6rem;color:#fff;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.45);transition:transform 0.3s,box-shadow 0.3s}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
 /* Full hover overlay on avatar */
 .avatar-overlay{
-  position:absolute;inset:0;
+  position:absolute;
+  top:4px;left:4px;right:4px;bottom:4px;
   border-radius:50%;
-  background:rgba(0,0,0,0.55);
+  background:rgba(0,0,0,0.58);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:5px;
   opacity:0;
   transition:opacity 0.25s cubic-bezier(.22,.68,0,1.2);
-  border:4px solid #fff;
-  box-sizing:border-box;
   pointer-events:none;
+  overflow:hidden;
 }
 .avatar-overlay .cam-icon{font-size:1.6rem;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
 .avatar-overlay .cam-label{font-family:'Libre Baskerville',serif;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.9)}
@@ -100,18 +100,18 @@ textarea.bio-input{resize:vertical;min-height:80px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;padding-bottom:16px;border-bottom:2px solid var(--border)}
 .section-header h2{font-family:'Libre Baskerville',serif;font-size:1.2rem;font-weight:700;color:var(--dark)}
 .section-header span{font-size:0.85rem;color:var(--light);font-style:italic}
-.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
-.article-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s cubic-bezier(.22,.68,0,1.2);cursor:pointer;border:1px solid transparent}
-.article-card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,0,0,0.12);border-color:var(--border)}
-.card-img{width:100%;height:170px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
-.article-card:hover .card-img img{transform:scale(1.05)}
-.card-body{padding:20px}
-.card-date{font-family:'Libre Baskerville',serif;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
-.card-excerpt{font-size:0.98rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-actions{padding:0 20px 16px;display:flex;gap:8px}
-.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:6px;padding:7px 16px;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;cursor:pointer;transition:all 0.22s}
-.btn-del:hover{background:#f5c6c6;transform:translateY(-1px)}
+
+
+
+
+
+
+
+
+
+
+
+
 .empty-state{text-align:center;padding:60px 20px;color:var(--light);grid-column:1/-1}
 .empty-state p{font-size:1.05rem;font-style:italic}
 .loader{text-align:center;padding:50px;color:var(--light);font-style:italic;grid-column:1/-1}
@@ -136,6 +136,128 @@ footer span{color:var(--accent)}
 .icon-btn{display:inline-flex;align-items:center;gap:7px}
 .icon-btn svg{flex-shrink:0;vertical-align:middle}
 .nav-write-btn svg,.btn-action svg,.btn-edit-profile svg,.btn-logout svg,.modal-link svg,.read-more svg{flex-shrink:0}
+
+/* ══ CONFIRM MODALS ══ */
+.modal-bg{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.72);
+  backdrop-filter:blur(8px);
+  z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.28s;
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal-card{
+  background:#1a1a1a;
+  border-radius:20px;
+  width:100%;max-width:380px;
+  padding:32px 28px 24px;
+  text-align:center;
+  transform:scale(0.88) translateY(24px);
+  transition:transform 0.38s cubic-bezier(.22,.68,0,1.3);
+  box-shadow:0 40px 100px rgba(0,0,0,0.6);
+}
+.modal-bg.open .modal-card{transform:scale(1) translateY(0)}
+.modal-icon{
+  width:64px;height:64px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+  font-size:1.6rem;
+}
+.modal-icon.danger{background:rgba(220,50,50,0.18)}
+.modal-icon.warning{background:rgba(200,169,110,0.18)}
+.modal-icon svg{color:#e05555}
+.modal-icon.warning svg{color:var(--accent)}
+.modal-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.25rem;font-weight:700;
+  color:#fff;margin-bottom:10px;
+}
+.modal-desc{
+  font-family:'Crimson Text',serif;
+  font-size:1rem;line-height:1.6;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:26px;
+}
+.modal-desc strong{color:rgba(255,255,255,0.85);font-weight:600}
+.modal-btn-primary{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:14px;
+  border:none;border-radius:12px;
+  font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  cursor:pointer;transition:all 0.25s;margin-bottom:10px;
+}
+.modal-btn-primary.danger{background:linear-gradient(135deg,#e05555,#c0392b);color:#fff}
+.modal-btn-primary.danger:hover{background:linear-gradient(135deg,#e86060,#d04040);transform:translateY(-1px);box-shadow:0 8px 24px rgba(220,50,50,0.4)}
+.modal-btn-primary.warning{background:var(--accent);color:#fff}
+.modal-btn-primary.warning:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(200,169,110,0.4)}
+.modal-btn-secondary{
+  display:block;width:100%;padding:13px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;
+  font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  color:rgba(255,255,255,0.5);cursor:pointer;
+  transition:all 0.22s;
+}
+.modal-btn-secondary:hover{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8)}
+
+/* ══ IMPROVED CARDS ══ */
+.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:28px}
+.article-card{
+  background:var(--white);border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06),0 8px 32px rgba(0,0,0,0.04);
+  transition:all 0.35s cubic-bezier(.22,.68,0,1.2);
+  cursor:pointer;border:1.5px solid var(--border);
+  position:relative;
+}
+.article-card:hover{
+  transform:translateY(-8px) scale(1.01);
+  box-shadow:0 20px 56px rgba(0,0,0,0.13);
+  border-color:rgba(200,169,110,0.3);
+}
+.card-img{width:100%;height:185px;background:linear-gradient(135deg,#1a1a1a,#2d2d2d);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s cubic-bezier(.22,.68,0,1.2)}
+.article-card:hover .card-img img{transform:scale(1.06)}
+.card-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.3) 0%,transparent 50%)}
+.card-body{padding:20px 20px 14px}
+.card-date{
+  font-family:'Libre Baskerville',serif;
+  font-size:0.66rem;text-transform:uppercase;letter-spacing:2px;
+  color:var(--accent);margin-bottom:9px;
+  display:flex;align-items:center;gap:6px;
+}
+.card-date::before{content:'';width:16px;height:1.5px;background:var(--accent);display:inline-block}
+.card-excerpt{font-size:1rem;color:var(--mid);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-actions{
+  padding:12px 20px 16px;
+  display:flex;gap:8px;
+  border-top:1px solid var(--border);
+  margin-top:4px;
+}
+.btn-del{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;color:#c0392b;
+  border:1.5px solid rgba(192,57,43,0.2);
+  border-radius:8px;padding:7px 14px;
+  font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;
+  cursor:pointer;transition:all 0.22s;
+}
+.btn-del:hover{background:#fde8e8;border-color:rgba(192,57,43,0.4);transform:translateY(-1px)}
+.btn-edit-article{
+  display:inline-flex;align-items:center;gap:6px;
+  background:transparent;color:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:8px;padding:7px 14px;
+  font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;
+  cursor:pointer;transition:all 0.22s;
+}
+.btn-edit-article:hover{background:var(--dark);color:#fff;border-color:var(--dark);transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -148,7 +270,7 @@ footer span{color:var(--accent)}
   <div class="banner-zone" id="bannerZone">
     <img class="banner-img" id="bannerImg" src="" alt="">
     <div class="banner-gradient"></div>
-    <div class="banner-overlay"><div class="banner-overlay-pill"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Changer la bannière</div></div>
+    <div class="banner-overlay"><div class="banner-overlay-pill"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Modifier</div></div>
     <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="quickBannerChange(this)">
     <div class="profile-info-row">
       <div class="avatar-zone" id="avatarZone">
@@ -197,6 +319,39 @@ footer span{color:var(--accent)}
 </div>
 
 <footer><p><span>ArticlePress</span> &mdash; Plateforme &#233;ditoriale &mdash; 2026</p></footer>
+
+<!-- ══ DELETE ARTICLE MODAL ══ -->
+<div class="modal-bg" id="deleteModal">
+  <div class="modal-card">
+    <div class="modal-icon danger">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </div>
+    <div class="modal-title">Supprimer l'article ?</div>
+    <div class="modal-desc">Cette action est <strong>définitive et irréversible</strong>. Ton article sera supprimé à jamais.</div>
+    <button class="modal-btn-primary danger" id="confirmDeleteBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      Supprimer l'article
+    </button>
+    <button class="modal-btn-secondary" onclick="closeModal('deleteModal')">Garder l'article</button>
+  </div>
+</div>
+
+<!-- ══ LOGOUT MODAL ══ -->
+<div class="modal-bg" id="logoutModal">
+  <div class="modal-card">
+    <div class="modal-icon warning">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
+    <div class="modal-title">Se déconnecter ?</div>
+    <div class="modal-desc">Tu vas être déconnecté de ton compte <strong>ArticlePress</strong>.</div>
+    <button class="modal-btn-primary warning" onclick="confirmLogout()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Se déconnecter
+    </button>
+    <button class="modal-btn-secondary" onclick="closeModal('logoutModal')">Rester connecté</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -214,7 +369,9 @@ async function initNav(){
     navRight.innerHTML=`<a href="editor.html" class="nav-write-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Écrire</a><div class="nav-divider"></div><a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a><button class="btn-logout" onclick="logout()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg> Déconnexion</button>`;
   }
 }
-async function logout(){await db.auth.signOut();window.location.href='index.html';}
+function logout(){openModal('logoutModal');}
+function editArticle(id,e){e.stopPropagation();window.location.href='editor.html?edit='+id;}
+async function confirmLogout(){await db.auth.signOut();window.location.href='index.html';}
 initNav();
 
 async function init(){
@@ -286,18 +443,41 @@ function renderArticles(articles,own){
   if(!articles||articles.length===0){list.innerHTML='<div class="empty-state"><p>Aucun article publié pour le moment.</p></div>';return;}
   list.innerHTML=articles.map((a,i)=>{
     const preview=a.content?a.content.substring(0,160)+'...':''
+    const imgHtml = a.image_data
+      ? `<img src="${a.image_data}" alt=""><div class="card-img-overlay"></div>`
+      : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
     return `<div class="article-card" style="animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) ${i*0.07}s both">
-      <div class="card-img">${a.image_data?`<img src="${a.image_data}" alt="">`:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'}</div>
+      <div class="card-img">${imgHtml}</div>
       <div class="card-body">
         <div class="card-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
         <div class="card-excerpt">${preview}</div>
       </div>
-      ${own?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg> Supprimer</button></div>`:''}</div>`
+      ${own?`<div class="card-actions">
+        <button class="btn-edit-article" onclick="editArticle('${a.id}',event)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Modifier
+        </button>
+        <button class="btn-del" onclick="deleteArticle('${a.id}',event)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Supprimer
+        </button>
+      </div>`:''}</div>`
   }).join('');
 }
-async function deleteArticle(id,e){
-  e.stopPropagation();if(!confirm('Supprimer cet article ?'))return;
-  await db.from('articles').delete().eq('id',id).eq('user_id',currentUser.id);init();
+let pendingDeleteId=null;
+function deleteArticle(id,e){
+  e.stopPropagation();
+  pendingDeleteId=id;
+  openModal('deleteModal');
+  document.getElementById('confirmDeleteBtn').onclick=async()=>{
+    closeModal('deleteModal');
+    await db.from('articles').delete().eq('id',pendingDeleteId).eq('user_id',currentUser.id);
+    init();
+// Close modals on backdrop click
+document.querySelectorAll('.modal-bg').forEach(bg=>{
+  bg.addEventListener('click',e=>{if(e.target===bg)bg.classList.remove('open');});
+});
+  };
 }
 function toggleEdit(){
   const p=document.getElementById('editPanel');
@@ -318,6 +498,8 @@ async function saveProfile(){
   if(error)showToast('Erreur: '+error.message,'error');
   else{showToast('Profil mis à jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
 }
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
 function showToast(msg,type){
   const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';
   setTimeout(()=>t.classList.remove('show'),3200);
