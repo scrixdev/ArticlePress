@@ -16,24 +16,35 @@ const db=supabase.createClient(SUPA_URL,SUPA_KEY);
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6;min-height:100vh}
 a{text-decoration:none;color:inherit}
-nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 30px rgba(0,0,0,0.4)}
 .logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
 .logo span{color:var(--accent)}
-.nav-links a{color:rgba(255,255,255,0.75);font-size:0.95rem;margin-left:28px;transition:color 0.2s}
-.nav-links a:hover{color:#fff}
-.btn-nav{background:var(--accent);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-left:20px;transition:all 0.2s}
-.btn-nav:hover{background:#b8933e}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-center{display:flex;align-items:center;gap:8px}
+.nav-divider{width:1px;height:22px;background:rgba(255,255,255,0.1);margin:0 4px}
+.nav-profile-btn{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,0.82);font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:7px 14px 7px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s;text-decoration:none}
+.nav-profile-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:#fff}
+.nav-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)}
+.nav-avatar img{width:100%;height:100%;object-fit:cover}
+.btn-logout{background:transparent;color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.09);border-radius:7px;padding:8px 14px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.05)}
+.btn-login-nav{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-login-nav:hover{background:#b8933e;transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,110,0.35)}
 #authWall{display:none;text-align:center;padding:100px 20px}
 #authWall h2{font-family:'Libre Baskerville',serif;font-size:1.8rem;margin-bottom:16px}
 #authWall p{color:var(--light);margin-bottom:30px;font-size:1.1rem}
 .btn-big{display:inline-block;background:var(--dark);color:#fff;padding:14px 36px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-#editorMain{max-width:1100px;margin:0 auto;padding:40px}
-.editor-toolbar{display:flex;gap:12px;justify-content:flex-end;margin-bottom:20px;flex-wrap:wrap}
-.btn-tool{padding:10px 24px;border-radius:6px;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s;border:none}
-.btn-save{background:#e8e6e3;color:var(--dark)}.btn-save:hover{background:#d0ccc7}
-.btn-publish{background:var(--dark);color:#fff}.btn-publish:hover{background:var(--mid)}
-.btn-pdf{background:#2c5f2d;color:#fff}.btn-pdf:hover{background:#1e4620}
-.btn-tool:disabled{opacity:0.5;cursor:not-allowed}
+#editorMain{max-width:1100px;margin:0 auto;padding:36px 40px}
+.editor-toolbar{display:flex;gap:8px;align-items:center}
+.btn-tool{padding:9px 20px;border-radius:7px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-tool:hover{transform:translateY(-1px)}
+.btn-tool:disabled{opacity:0.45;cursor:not-allowed;transform:none!important}
+.btn-save{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.12)}
+.btn-save:hover{background:rgba(255,255,255,0.13);color:#fff;border-color:rgba(255,255,255,0.3)}
+.btn-pdf{background:rgba(109,191,110,0.12);color:#7ecf7f;border:1.5px solid rgba(109,191,110,0.28)}
+.btn-pdf:hover{background:rgba(109,191,110,0.22);color:#a0dfa1;border-color:rgba(109,191,110,0.5)}
+.btn-publish{background:var(--accent);color:#fff;border:1.5px solid var(--accent);box-shadow:0 3px 14px rgba(200,169,110,0.28)}
+.btn-publish:hover{background:#b8933e;border-color:#b8933e;box-shadow:0 6px 22px rgba(200,169,110,0.42)}
 .article-container{background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.08);overflow:hidden}
 .article-header{background:linear-gradient(135deg,#4a4a4a,#2c2c2c);padding:20px 30px}
 .date-input{font-family:'Libre Baskerville',serif;font-size:1.1rem;letter-spacing:2px;text-transform:uppercase;background:transparent;border:2px solid transparent;color:#fff;padding:8px 15px;border-radius:6px;min-width:280px;transition:all 0.3s}
@@ -93,11 +104,13 @@ nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:c
 <body>
 <nav>
   <a href="index.html" class="logo">Article<span>Press</span></a>
-  <div class="nav-links">
-    <a href="index.html">Accueil</a>
-    <a href="#" id="navProfile" style="display:none"></a>
-    <a href="auth.html" id="navLogin">Connexion</a>
-    <button class="btn-nav" id="navLogout" style="display:none" onclick="logout()">Deconnexion</button>
+  <div class="editor-toolbar" id="editorToolbar" style="display:none">
+    <button class="btn-tool btn-save" onclick="saveDraft()">💾 Sauvegarder</button>
+    <button class="btn-tool btn-pdf" onclick="window.print()">⬇ PDF</button>
+    <button class="btn-tool btn-publish" id="publishBtn" onclick="publishArticle()">✦ Publier</button>
+  </div>
+  <div class="nav-right" id="navRight">
+    <a href="auth.html" class="btn-login-nav">Connexion</a>
   </div>
 </nav>
 
@@ -108,11 +121,6 @@ nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:c
 </div>
 
 <div id="editorMain" style="display:none">
-  <div class="editor-toolbar">
-    <button class="btn-tool btn-save" onclick="saveDraft()">Sauvegarder</button>
-    <button class="btn-tool btn-pdf" onclick="window.print()">Telecharger PDF</button>
-    <button class="btn-tool btn-publish" id="publishBtn" onclick="publishArticle()">Publier</button>
-  </div>
   <div class="article-container">
     <div class="article-header">
       <input type="text" class="date-input" id="dateInput" value="MARCH 3, 2026">
@@ -165,11 +173,17 @@ let currentUser=null, imageData=null, imageChanged=false, publishedId=null, draf
 
 async function initNav(){
   const{data:{session}}=await db.auth.getSession();
+  const navRight=document.getElementById('navRight');
   if(session){
-    document.getElementById('navLogin').style.display='none';
-    document.getElementById('navLogout').style.display='inline';
-    const{data:p}=await db.from('profiles').select('username').eq('id',session.user.id).single();
-    if(p){const a=document.getElementById('navProfile');a.href='profile.html?user='+p.username;a.style.display='inline';a.textContent=p.username;}
+    const{data:p}=await db.from('profiles').select('username,avatar_url').eq('id',session.user.id).single();
+    const uname=p?p.username:'profil';
+    const av=p&&p.avatar_url;
+    const avatarHtml=av?`<div class="nav-avatar"><img src="${av}" alt=""></div>`:`<div class="nav-avatar">${uname[0].toUpperCase()}</div>`;
+    navRight.innerHTML=`
+      <div class="nav-divider"></div>
+      <a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    `;
   }
 }
 async function logout(){await db.auth.signOut();window.location.href='index.html';}
@@ -180,6 +194,7 @@ async function init(){
   if(!session){document.getElementById('authWall').style.display='block';return;}
   currentUser=session.user;
   document.getElementById('editorMain').style.display='block';
+  document.getElementById('editorToolbar').style.display='flex';
   const{data:profile}=await db.from('profiles').select('*').eq('id',currentUser.id).single();
   if(profile){
     document.getElementById('authorName').value=profile.username||'';
