@@ -178,6 +178,7 @@ nav{
   flex:1;display:none;flex-direction:column;
   padding:24px 32px 32px;
   min-height:0;
+  height:calc(100vh - 68px);
 }
 
 .article-container{
@@ -187,6 +188,7 @@ nav{
   overflow:hidden;
   animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) both;
   min-height:0;
+  height:100%;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
@@ -268,7 +270,8 @@ nav{
   padding:36px 44px;
   font-family:'Crimson Text',serif;font-size:1.15rem;line-height:1.95;
   resize:none;color:var(--dark);background:transparent;
-  min-height:500px;
+  min-height:0;
+  height:100%;
   transition:background 0.2s;
 }
 .article-textarea:focus{outline:none;background:rgba(200,169,110,0.015)}
@@ -368,14 +371,14 @@ nav{
 </nav>
 
 <!-- AUTH WALL -->
-<div id="authWall" style="flex:1;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:100px 20px">
+<div id="authWall">
   <h2 style="font-family:'Libre Baskerville',serif;font-size:1.8rem;margin-bottom:16px">Connexion requise</h2>
   <p style="color:var(--light);margin-bottom:30px;font-size:1.1rem">Connecte-toi pour écrire et publier des articles.</p>
   <a href="auth.html" class="btn-big">Se connecter</a>
 </div>
 
 <!-- EDITOR -->
-<div id="editorMain" style="flex:1;display:none;flex-direction:column;padding:24px 32px 32px">
+<div id="editorMain">
   <div class="article-container">
 
     <div class="article-header">
@@ -456,14 +459,14 @@ async function init(){
   const{data:{session}}=await db.auth.getSession();
   if(!session){
     const aw=document.getElementById('authWall');
-    aw.style.display='flex';
+    aw.style.cssText='flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:100px 20px';
     return;
   }
   currentUser=session.user;
 
   // Show editor + toolbar
   const em=document.getElementById('editorMain');
-  em.style.display='flex';
+  em.style.cssText='flex:1;display:flex;flex-direction:column;padding:24px 32px 32px;min-height:0;height:calc(100vh - 68px)';
   document.getElementById('navActions').style.display='flex';
 
   // Load profile → auto-fill name, title, avatar
