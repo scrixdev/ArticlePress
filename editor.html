@@ -668,6 +668,11 @@ nav{
   }
   .article-textarea{padding:24px 20px;min-height:400px}
 }
+
+/* Icon alignment */
+.icon-btn{display:inline-flex;align-items:center;gap:7px}
+.icon-btn svg{flex-shrink:0;vertical-align:middle}
+.nav-write-btn svg,.btn-action svg,.btn-edit-profile svg,.btn-logout svg,.modal-link svg,.read-more svg{flex-shrink:0}
 </style>
 </head>
 <body>
@@ -677,9 +682,9 @@ nav{
   <a href="index.html" class="logo">Article<span>Press</span></a>
 
   <div class="nav-actions" id="navActions" style="display:none">
-    <button class="btn-action btn-save" onclick="saveDraft()">💾 Sauvegarder</button>
-    <button class="btn-action btn-pdf" onclick="window.print()">⬇ PDF</button>
-    <button class="btn-action btn-publish" id="publishBtn" onclick="publishArticle()">✦ Publier</button>
+    <button class="btn-action btn-save" onclick="saveDraft()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Sauvegarder</button>
+    <button class="btn-action btn-pdf" onclick="window.print()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF</button>
+    <button class="btn-action btn-publish" id="publishBtn" onclick="publishArticle()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Publier</button>
   </div>
 
   <div class="nav-right" id="navRight">
@@ -701,7 +706,7 @@ nav{
     <!-- DATE BAR -->
     <div class="article-header">
       <input type="text" class="date-input" id="dateInput" value="MARCH 3, 2026">
-      <span class="header-ornament">ArticlePress &nbsp;✦&nbsp; Éditeur</span>
+      <span class="header-ornament">ArticlePress &nbsp;<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="10 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 10 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 10 2"/></svg>&nbsp; Éditeur</span>
     </div>
 
     <!-- BODY -->
@@ -714,7 +719,7 @@ nav{
         <div class="profile-upload" onclick="document.getElementById('imgInput').click()">
           <img id="profileImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='148' height='148'%3E%3Crect fill='%23e8e6e3' width='148' height='148'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia' font-size='11' fill='%23aaa'%3ECliquez pour%0Aajouter%3C/text%3E%3C/svg%3E">
           <div class="upload-overlay">
-            <div class="upload-icon">📷</div>
+            <div class="upload-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
             Changer la photo
           </div>
           <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="loadImage(this)">
@@ -938,7 +943,7 @@ async function publishArticle(){
     setStatus('Publié !','saved');
     showToast('Article publié !','success');
     localStorage.removeItem('ap_draft');
-    btn.textContent='✦ Mettre à jour';
+    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Mettre à jour`;
   }
   btn.disabled=false;
 }
