@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ArticlePress - Profil</title>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL="https://tophvdcznopyqwzzzghi.supabase.co";
@@ -12,189 +12,171 @@ const SUPA_KEY="sb_publishable_2i-R1PGEdnbtnxEJL8p5Sw_IJXUypOr";
 const db=supabase.createClient(SUPA_URL,SUPA_KEY);
 </script>
 <style>
-:root{--dark:#1a1a1a;--mid:#4a4a4a;--light:#888;--cream:#f5f3f0;--accent:#c8a96e;--border:#e8e6e3;}
+:root{--dark:#0f0f0f;--mid:#4a4a4a;--light:#999;--cream:#f7f5f2;--white:#ffffff;--accent:#c8a96e;--accent-dark:#a8893e;--border:#e2dfd9;}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
 a{text-decoration:none;color:inherit}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
-/* NAV */
 nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 30px rgba(0,0,0,0.4)}
 .logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
 .logo span{color:var(--accent)}
 .nav-right{display:flex;align-items:center;gap:8px}
-.nav-write-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(200,169,110,0.14);color:var(--accent);border:1.5px solid rgba(200,169,110,0.35);border-radius:7px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.2s}
-.nav-write-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px)}
-.nav-divider{width:1px;height:22px;background:rgba(255,255,255,0.1);margin:0 6px}
-.nav-profile-btn{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,0.82);font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:7px 14px 7px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s}
-.nav-profile-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:#fff}
+.nav-write-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(200,169,110,0.14);color:var(--accent);border:1.5px solid rgba(200,169,110,0.35);border-radius:7px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.25s}
+.nav-write-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,110,0.3)}
+.nav-divider{width:1px;height:22px;background:rgba(255,255,255,0.1);margin:0 4px}
+.nav-profile-btn{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,0.82);font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:7px 14px 7px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.25s}
+.nav-profile-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:#fff;transform:translateY(-1px)}
 .nav-avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)}
 .nav-avatar-sm img{width:100%;height:100%;object-fit:cover}
-.btn-logout{background:transparent;color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.09);border-radius:7px;padding:8px 14px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,0.28)}
-.btn-login-nav{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s}
-.btn-login-nav:hover{background:#b8933e;transform:translateY(-1px)}
+.btn-logout{background:transparent;color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.09);border-radius:7px;padding:8px 14px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.25s}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,0.28);background:rgba(255,255,255,0.05);transform:translateY(-1px)}
+.btn-login-nav{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.25s}
+.btn-login-nav:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(200,169,110,0.35)}
 
-/* PROFILE CARD */
-.profile-wrapper{max-width:100%;margin:0;padding:0}
-.profile-card{background:#fff;border-radius:0 0 16px 16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.1);animation:fadeUp 0.55s cubic-bezier(.22,.68,0,1.2) both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-/* BANNER */
-.banner-zone{position:relative;height:280px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);overflow:hidden;cursor:pointer}
-.banner-zone img.banner-img{width:100%;height:100%;object-fit:cover;display:none}
-.banner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;background:rgba(0,0,0,0.38)}
+.profile-hero{position:relative;background:var(--dark);animation:fadeDown 0.45s cubic-bezier(.22,.68,0,1.2) both}
+.banner-zone{position:relative;height:340px;background:linear-gradient(135deg,#1a1a1a 0%,#2d2520 60%,#1a1a1a 100%);overflow:hidden;cursor:pointer}
+.banner-zone::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23c8a96e' fill-opacity='0.045'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.banner-zone img.banner-img{width:100%;height:100%;object-fit:cover;display:none;position:relative;z-index:1}
+.banner-gradient{position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.2) 65%,transparent 100%);pointer-events:none;z-index:2}
+.banner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;background:rgba(0,0,0,0.32);z-index:3}
 .banner-zone:hover .banner-overlay{opacity:1}
-.banner-overlay-pill{background:rgba(0,0,0,0.55);color:#fff;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:10px 22px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.25)}
+.banner-overlay-pill{background:rgba(0,0,0,0.65);color:#fff;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:12px 26px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.2);backdrop-filter:blur(4px)}
 .banner-no-edit{cursor:default!important}
 .banner-no-edit .banner-overlay{display:none!important}
-
-/* PROFILE INFO */
-.profile-info-row{padding:0 60px 36px;display:flex;align-items:flex-end;gap:28px;margin-top:-60px;position:relative;z-index:2}
-
+.profile-info-row{position:absolute;bottom:0;left:0;right:0;padding:0 56px 32px;display:flex;align-items:flex-end;gap:28px;z-index:4}
 .avatar-zone{position:relative;flex-shrink:0;cursor:pointer}
-.profile-avatar{width:116px;height:116px;border-radius:50%;border:5px solid #fff;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.2rem;color:#fff;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.22)}
+.profile-avatar{width:136px;height:136px;border-radius:50%;border:4px solid #fff;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.6rem;color:#fff;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.45);transition:transform 0.3s,box-shadow 0.3s}
+.avatar-zone:hover .profile-avatar{transform:scale(1.04);box-shadow:0 12px 40px rgba(0,0,0,0.55)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
-.avatar-cam{position:absolute;bottom:6px;right:6px;width:32px;height:32px;border-radius:50%;background:var(--accent);border:3px solid #fff;display:none;align-items:center;justify-content:center;font-size:0.9rem;box-shadow:0 2px 10px rgba(0,0,0,0.2);transition:transform 0.2s}
-.avatar-cam:hover{transform:scale(1.12)}
-
+.avatar-cam{position:absolute;bottom:6px;right:6px;width:34px;height:34px;border-radius:50%;background:var(--accent);border:3px solid #fff;display:none;align-items:center;justify-content:center;font-size:0.9rem;box-shadow:0 2px 10px rgba(0,0,0,0.3);transition:transform 0.2s;cursor:pointer}
+.avatar-cam:hover{transform:scale(1.15)}
 .profile-text{flex:1;min-width:0;padding-bottom:6px}
-.profile-username{font-family:'Libre Baskerville',serif;font-size:1.65rem;font-weight:700;color:var(--dark);margin-bottom:2px;line-height:1.2}
-.profile-title-txt{color:var(--accent);font-size:1rem;font-style:italic;margin-bottom:6px;min-height:1.4em}
-.profile-bio-txt{color:var(--mid);font-size:1rem;line-height:1.6;max-width:480px}
-
+.profile-username{font-family:'Libre Baskerville',serif;font-size:2.4rem;font-weight:700;color:#ffffff;margin-bottom:5px;line-height:1.1;text-shadow:0 2px 20px rgba(0,0,0,0.7);letter-spacing:0.2px}
+.profile-title-txt{color:var(--accent);font-size:1.05rem;font-style:italic;margin-bottom:8px;min-height:1.4em;text-shadow:0 1px 8px rgba(0,0,0,0.5)}
+.profile-bio-txt{color:rgba(255,255,255,0.82);font-size:1rem;line-height:1.55;max-width:560px;text-shadow:0 1px 6px rgba(0,0,0,0.5)}
 .profile-actions-col{display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-bottom:6px;flex-shrink:0}
-.stat-pill{text-align:center;background:var(--cream);border-radius:10px;padding:10px 22px}
-.stat-pill-value{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1}
-.stat-pill-label{font-size:0.7rem;color:var(--light);text-transform:uppercase;letter-spacing:1.5px;margin-top:3px}
-.btn-edit-profile{background:var(--dark);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.btn-edit-profile:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.stat-pill{text-align:center;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 28px;transition:all 0.25s}
+.stat-pill:hover{background:rgba(255,255,255,0.16)}
+.stat-pill-value{font-family:'Libre Baskerville',serif;font-size:1.9rem;font-weight:700;color:#fff;line-height:1}
+.stat-pill-label{font-size:0.66rem;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:2px;margin-top:4px}
+.btn-edit-profile{background:rgba(255,255,255,0.1);color:#fff;border:1.5px solid rgba(255,255,255,0.22);border-radius:8px;padding:10px 22px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.25s;white-space:nowrap;backdrop-filter:blur(4px)}
+.btn-edit-profile:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.45);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.25)}
 
-/* EDIT PANEL */
-.edit-panel{display:none;border-top:2px solid var(--border);padding:32px 60px 40px;background:#faf9f7}
-.edit-panel-title{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--dark)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.edit-panel{display:none;background:#fff;border-top:3px solid var(--accent);padding:32px 56px 36px;animation:slideDown 0.3s cubic-bezier(.22,.68,0,1.2)}
+.edit-panel-title{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;margin-bottom:22px;color:var(--dark);display:flex;align-items:center;gap:12px}
+.edit-panel-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .form-row{margin-bottom:0}
 .form-row.full{grid-column:1/-1}
-label{display:block;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mid);margin-bottom:7px}
-input[type=text],textarea.bio-input{width:100%;border:2px solid var(--border);border-radius:7px;padding:11px 14px;font-family:'Crimson Text',serif;font-size:1.02rem;color:var(--dark);background:#fff;transition:border-color 0.2s}
-input:focus,textarea:focus{outline:none;border-color:var(--dark)}
+label{display:block;font-family:'Libre Baskerville',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--light);margin-bottom:7px}
+input[type=text],textarea.bio-input{width:100%;border:2px solid var(--border);border-radius:7px;padding:11px 14px;font-family:'Crimson Text',serif;font-size:1.02rem;color:var(--dark);background:#faf9f7;transition:border-color 0.22s,box-shadow 0.22s}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(200,169,110,0.12)}
 textarea.bio-input{resize:vertical;min-height:80px}
-.edit-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:18px;border-top:2px solid var(--border)}
-.btn-cancel{background:#e8e6e3;color:var(--dark);border:none;border-radius:7px;padding:11px 22px;font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.btn-cancel:hover{background:#d0ccc7}
-.btn-save{background:var(--dark);color:#fff;border:none;border-radius:7px;padding:11px 26px;font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.btn-save:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,0.15)}
+.edit-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.btn-cancel{background:var(--cream);color:var(--dark);border:2px solid var(--border);border-radius:7px;padding:10px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.22s}
+.btn-cancel:hover{background:#e8e6e3;transform:translateY(-1px)}
+.btn-save-profile{background:var(--dark);color:#fff;border:none;border-radius:7px;padding:10px 26px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.22s}
+.btn-save-profile:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,0.15)}
 
-/* ARTICLES */
-.articles-section{max-width:100%;margin:28px 0 60px;padding:0 60px}
-.articles-section h2{font-family:'Libre Baskerville',serif;font-size:1.2rem;margin-bottom:22px;padding-bottom:12px;border-bottom:2px solid var(--border)}
-.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-.article-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s;cursor:pointer}
-.article-card:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(0,0,0,0.12)}
-.card-img{width:100%;height:160px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
-.card-img img{width:100%;height:100%;object-fit:cover}
-.card-body{padding:18px}
-.card-date{font-family:'Libre Baskerville',serif;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--light);margin-bottom:7px}
+.articles-section{padding:44px 56px 60px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;padding-bottom:16px;border-bottom:2px solid var(--border)}
+.section-header h2{font-family:'Libre Baskerville',serif;font-size:1.2rem;font-weight:700;color:var(--dark)}
+.section-header span{font-size:0.85rem;color:var(--light);font-style:italic}
+.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.article-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s cubic-bezier(.22,.68,0,1.2);cursor:pointer;border:1px solid transparent}
+.article-card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(0,0,0,0.12);border-color:var(--border)}
+.card-img{width:100%;height:170px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.article-card:hover .card-img img{transform:scale(1.05)}
+.card-body{padding:20px}
+.card-date{font-family:'Libre Baskerville',serif;font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
 .card-excerpt{font-size:0.98rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-actions{padding:0 18px 14px;display:flex;gap:8px}
-.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:5px;padding:6px 14px;font-family:'Libre Baskerville',serif;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.btn-del:hover{background:#f5c6c6}
-.empty-state{text-align:center;padding:50px;color:var(--light)}
-.loader{text-align:center;padding:50px;color:var(--light);font-style:italic}
-
-.toast{position:fixed;bottom:30px;right:30px;background:var(--dark);color:#fff;padding:14px 24px;border-radius:9px;font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:2000}
-.toast.show{transform:translateY(0);opacity:1}
+.card-actions{padding:0 20px 16px;display:flex;gap:8px}
+.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:6px;padding:7px 16px;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;cursor:pointer;transition:all 0.22s}
+.btn-del:hover{background:#f5c6c6;transform:translateY(-1px)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--light);grid-column:1/-1}
+.empty-state p{font-size:1.05rem;font-style:italic}
+.loader{text-align:center;padding:50px;color:var(--light);font-style:italic;grid-column:1/-1}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--dark);color:#fff;padding:13px 22px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;transform:translateY(70px) scale(0.95);opacity:0;transition:all 0.32s cubic-bezier(.22,.68,0,1.2);z-index:2000;box-shadow:0 8px 30px rgba(0,0,0,0.25)}
+.toast.show{transform:translateY(0) scale(1);opacity:1}
 .toast.success{background:#27ae60}
 .toast.error{background:#c0392b}
-
-footer{background:var(--dark);color:rgba(255,255,255,0.4);text-align:center;padding:32px;font-size:0.9rem;margin-top:20px}
+footer{background:var(--dark);color:rgba(255,255,255,0.35);text-align:center;padding:28px;font-size:0.88rem;border-top:1px solid rgba(255,255,255,0.05)}
 footer span{color:var(--accent)}
-
-@media(max-width:660px){
+@media(max-width:700px){
   nav{padding:0 20px}
-  .profile-info-row{flex-direction:column;align-items:flex-start;margin-top:-44px;gap:14px;padding:0 20px 24px}
-  .profile-actions-col{flex-direction:row;align-items:center;width:100%}
+  .banner-zone{height:240px}
+  .profile-info-row{flex-direction:column;align-items:flex-start;padding:0 20px 20px;gap:14px}
+  .profile-username{font-size:1.7rem}
+  .profile-actions-col{flex-direction:row;align-items:center;width:100%;justify-content:space-between}
+  .edit-panel{padding:24px 20px}
   .form-grid{grid-template-columns:1fr}
-  .edit-panel{padding:24px 20px 32px}
-  .articles-section{padding:0 20px}
+  .articles-section{padding:28px 20px 40px}
 }
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="logo">Article<span>Press</span></a>
-  <div class="nav-right" id="navRight">
-    <a href="auth.html" class="btn-login-nav">Connexion</a>
-  </div>
+  <div class="nav-right" id="navRight"><a href="auth.html" class="btn-login-nav">Connexion</a></div>
 </nav>
 
-<div class="profile-wrapper">
-  <div class="profile-card">
-
-    <!-- BANNIERE -->
-    <div class="banner-zone" id="bannerZone">
-      <img class="banner-img" id="bannerImg" src="" alt="">
-      <div class="banner-overlay"><div class="banner-overlay-pill">📷 Changer la banniere</div></div>
-      <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="quickBannerChange(this)">
-    </div>
-
-    <!-- INFO ROW -->
+<div class="profile-hero" id="profileHero">
+  <div class="banner-zone" id="bannerZone">
+    <img class="banner-img" id="bannerImg" src="" alt="">
+    <div class="banner-gradient"></div>
+    <div class="banner-overlay"><div class="banner-overlay-pill">&#128247; Changer la banni&#232;re</div></div>
+    <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="quickBannerChange(this)">
     <div class="profile-info-row">
-
-      <!-- AVATAR -->
       <div class="avatar-zone" id="avatarZone">
         <div class="profile-avatar" id="profileAvatar">?</div>
-        <div class="avatar-cam" id="avatarCam">📷</div>
+        <div class="avatar-cam" id="avatarCam">&#128247;</div>
         <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="quickAvatarChange(this)">
       </div>
-
-      <!-- TEXTE -->
       <div class="profile-text">
-        <div class="profile-username" id="profileUsername">Chargement...</div>
+        <div class="profile-username" id="profileUsername">Chargement&#8230;</div>
         <div class="profile-title-txt" id="profileTitleTxt"></div>
         <div class="profile-bio-txt" id="profileBioTxt"></div>
       </div>
-
-      <!-- STATS + BTN -->
       <div class="profile-actions-col">
         <div class="stat-pill">
           <div class="stat-pill-value" id="articleCount">-</div>
           <div class="stat-pill-label">Articles</div>
         </div>
-        <button class="btn-edit-profile" id="editBtn" style="display:none" onclick="toggleEdit()">Modifier le profil</button>
-      </div>
-
-    </div>
-
-    <!-- EDIT PANEL -->
-    <div class="edit-panel" id="editPanel">
-      <div class="edit-panel-title">Modifier mon profil</div>
-      <div class="form-grid">
-        <div class="form-row"><label>Nom d'utilisateur</label><input type="text" id="editUsername" placeholder="jean_dupont"></div>
-        <div class="form-row"><label>Fonction / Titre</label><input type="text" id="editTitle" placeholder="Journaliste, Redacteur..."></div>
-        <div class="form-row full"><label>Bio</label><textarea class="bio-input" id="editBio" placeholder="Decris-toi en quelques mots..."></textarea></div>
-      </div>
-      <div class="edit-actions">
-        <button class="btn-cancel" onclick="toggleEdit()">Annuler</button>
-        <button class="btn-save" onclick="saveProfile()">Sauvegarder</button>
+        <button class="btn-edit-profile" id="editBtn" style="display:none" onclick="toggleEdit()">&#9998; Modifier le profil</button>
       </div>
     </div>
-
+  </div>
+  <div class="edit-panel" id="editPanel">
+    <div class="edit-panel-title">Modifier mon profil</div>
+    <div class="form-grid">
+      <div class="form-row"><label>Nom d'utilisateur</label><input type="text" id="editUsername" placeholder="jean_dupont"></div>
+      <div class="form-row"><label>Fonction / Titre</label><input type="text" id="editTitle" placeholder="Journaliste, R&#233;dacteur&#8230;"></div>
+      <div class="form-row full"><label>Bio</label><textarea class="bio-input" id="editBio" placeholder="D&#233;cris-toi en quelques mots&#8230;"></textarea></div>
+    </div>
+    <div class="edit-actions">
+      <button class="btn-cancel" onclick="toggleEdit()">Annuler</button>
+      <button class="btn-save-profile" onclick="saveProfile()">Sauvegarder</button>
+    </div>
   </div>
 </div>
 
-<!-- ARTICLES -->
 <div class="articles-section">
-  <h2>Articles publies</h2>
-  <div class="articles-list" id="articlesList"><div class="loader">Chargement...</div></div>
+  <div class="section-header">
+    <h2>Articles publi&#233;s</h2>
+    <span id="articleCountLabel"></span>
+  </div>
+  <div class="articles-list" id="articlesList"><div class="loader">Chargement&#8230;</div></div>
 </div>
 
-<footer><p><span>ArticlePress</span> &mdash; 2024</p></footer>
+<footer><p><span>ArticlePress</span> &mdash; Plateforme &#233;ditoriale &mdash; 2026</p></footer>
 <div class="toast" id="toast"></div>
 
 <script>
-let currentUser=null, profileData=null, isOwn=false;
+let currentUser=null,profileData=null,isOwn=false;
 const urlUsername=new URLSearchParams(window.location.search).get('user');
 
 async function initNav(){
@@ -205,11 +187,7 @@ async function initNav(){
     const uname=p?p.username:'profil';
     const av=p&&p.avatar_url;
     const avatarHtml=av?`<div class="nav-avatar-sm"><img src="${av}" alt=""></div>`:`<div class="nav-avatar-sm">${uname[0].toUpperCase()}</div>`;
-    navRight.innerHTML=`
-      <a href="editor.html" class="nav-write-btn">✏&nbsp;Ecrire</a>
-      <div class="nav-divider"></div>
-      <a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a>
-      <button class="btn-logout" onclick="logout()">Deconnexion</button>`;
+    navRight.innerHTML=`<a href="editor.html" class="nav-write-btn">&#9998; &#201;crire</a><div class="nav-divider"></div><a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a><button class="btn-logout" onclick="logout()">D&#233;connexion</button>`;
   }
 }
 async function logout(){await db.auth.signOut();window.location.href='index.html';}
@@ -218,38 +196,27 @@ initNav();
 async function init(){
   const{data:{session}}=await db.auth.getSession();
   if(session)currentUser=session.user;
-
   if(!urlUsername){
     if(!currentUser){window.location.href='auth.html';return;}
     const{data:p}=await db.from('profiles').select('username').eq('id',currentUser.id).single();
     if(p)window.location.href='profile.html?user='+p.username;
     return;
   }
-
   const{data:p}=await db.from('profiles').select('*').eq('username',urlUsername).single();
   if(!p){document.getElementById('profileUsername').textContent='Profil introuvable';return;}
-  profileData=p;
-  isOwn=!!(currentUser&&currentUser.id===p.id);
-
+  profileData=p;isOwn=!!(currentUser&&currentUser.id===p.id);
   renderProfile(p);
-
   if(isOwn){
-    // Activer edition banniere
     document.getElementById('bannerZone').style.cursor='pointer';
-    document.getElementById('bannerZone').onclick=()=>document.getElementById('bannerInput').click();
-    // Activer edition avatar
-    const cam=document.getElementById('avatarCam');
-    cam.style.display='flex';
-    document.getElementById('avatarZone').onclick=()=>document.getElementById('avatarInput').click();
-    // Bouton modifier
+    document.getElementById('bannerZone').onclick=(e)=>{if(e.target.closest('.profile-info-row')||e.target.closest('#editPanel'))return;document.getElementById('bannerInput').click();};
+    const cam=document.getElementById('avatarCam');cam.style.display='flex';
+    document.getElementById('avatarZone').onclick=(e)=>{e.stopPropagation();document.getElementById('avatarInput').click();};
     document.getElementById('editBtn').style.display='block';
-    // Remplir form
     document.getElementById('editUsername').value=p.username||'';
     document.getElementById('editTitle').value=p.title||'';
     document.getElementById('editBio').value=p.bio||'';
     loadArticlesOwn(p.id);
-  } else {
-    // Pas proprio : banniere non cliquable
+  }else{
     document.getElementById('bannerZone').classList.add('banner-no-edit');
     document.getElementById('avatarZone').style.cursor='default';
     loadArticlesPublic(p.id);
@@ -265,96 +232,72 @@ function renderProfile(p){
   else{av.textContent=(p.username||'?')[0].toUpperCase();}
   const banner=document.getElementById('bannerImg');
   if(p.banner_url){banner.src=p.banner_url;banner.style.display='block';}
-  document.title='ArticlePress - '+p.username;
+  document.title='ArticlePress — '+p.username;
 }
 
 async function quickAvatarChange(input){
-  if(!currentUser)return;
-  const file=input.files[0];if(!file)return;
+  if(!currentUser)return;const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=async e=>{
-    const d=e.target.result;
-    const{error}=await db.from('profiles').update({avatar_url:d}).eq('id',currentUser.id);
+  reader.onload=async e=>{const d=e.target.result;const{error}=await db.from('profiles').update({avatar_url:d}).eq('id',currentUser.id);
     if(error)showToast('Erreur: '+error.message,'error');
-    else{document.getElementById('profileAvatar').innerHTML=`<img src="${d}" alt="">`;showToast('Photo mise a jour !','success');}
-  };
+    else{document.getElementById('profileAvatar').innerHTML=`<img src="${d}" alt="">`;showToast('Photo mise à jour !','success');}};
   reader.readAsDataURL(file);
 }
-
 async function quickBannerChange(input){
-  if(!currentUser)return;
-  const file=input.files[0];if(!file)return;
+  if(!currentUser)return;const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=async e=>{
-    const d=e.target.result;
-    const{error}=await db.from('profiles').update({banner_url:d}).eq('id',currentUser.id);
+  reader.onload=async e=>{const d=e.target.result;const{error}=await db.from('profiles').update({banner_url:d}).eq('id',currentUser.id);
     if(error)showToast('Erreur: '+error.message,'error');
-    else{const b=document.getElementById('bannerImg');b.src=d;b.style.display='block';showToast('Banniere mise a jour !','success');}
-  };
+    else{const b=document.getElementById('bannerImg');b.src=d;b.style.display='block';showToast('Bannière mise à jour !','success');}};
   reader.readAsDataURL(file);
 }
 
-async function loadArticlesPublic(userId){
-  const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
-  renderArticles(a,false);
-}
-async function loadArticlesOwn(userId){
-  const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
-  renderArticles(a,true);
-}
+async function loadArticlesPublic(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,false);}
+async function loadArticlesOwn(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,true);}
 function renderArticles(articles,own){
-  document.getElementById('articleCount').textContent=articles?articles.length:0;
+  const count=articles?articles.length:0;
+  document.getElementById('articleCount').textContent=count;
+  document.getElementById('articleCountLabel').textContent=count+' article'+(count>1?'s':'');
   const list=document.getElementById('articlesList');
-  if(!articles||articles.length===0){list.innerHTML='<div class="empty-state"><p>Aucun article publie pour le moment.</p></div>';return;}
-  list.innerHTML=articles.map(a=>{
-    const preview=a.content?a.content.substring(0,160)+'...':'';
-    return `<div class="article-card">
-      <div class="card-img">${a.image_data?`<img src="${a.image_data}">`:'📰'}</div>
+  if(!articles||articles.length===0){list.innerHTML='<div class="empty-state"><p>Aucun article publié pour le moment.</p></div>';return;}
+  list.innerHTML=articles.map((a,i)=>{
+    const preview=a.content?a.content.substring(0,160)+'...':''
+    return `<div class="article-card" style="animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) ${i*0.07}s both">
+      <div class="card-img">${a.image_data?`<img src="${a.image_data}" alt="">`:'&#128240;'}</div>
       <div class="card-body">
         <div class="card-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
         <div class="card-excerpt">${preview}</div>
       </div>
-      ${own?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}')">Supprimer</button></div>`:''}</div>`;
+      ${own?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}',event)">Supprimer</button></div>`:''}</div>`
   }).join('');
 }
-
-async function deleteArticle(id){
-  if(!confirm('Supprimer cet article ?'))return;
-  await db.from('articles').delete().eq('id',id).eq('user_id',currentUser.id);
-  init();
+async function deleteArticle(id,e){
+  e.stopPropagation();if(!confirm('Supprimer cet article ?'))return;
+  await db.from('articles').delete().eq('id',id).eq('user_id',currentUser.id);init();
 }
-
 function toggleEdit(){
   const p=document.getElementById('editPanel');
-  const open=p.style.display==='block';
-  p.style.display=open?'none':'block';
+  const open=p.style.display==='block';p.style.display=open?'none':'block';
   if(!open)setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
-
 async function saveProfile(){
   if(!currentUser)return;
   const uname=document.getElementById('editUsername').value.trim();
   const title=document.getElementById('editTitle').value.trim();
   const bio=document.getElementById('editBio').value.trim();
   if(!uname)return showToast('Le nom utilisateur est requis.','error');
-  // Vérifier si le username est déjà pris par quelqu'un d'autre
-  if(uname !== profileData.username){
+  if(uname!==profileData.username){
     const{data:existing}=await db.from('profiles').select('id').eq('username',uname).maybeSingle();
-    if(existing && existing.id !== currentUser.id){
-      return showToast('Ce nom d\'utilisateur est déjà pris. Choisis-en un autre.','error');
-    }
+    if(existing&&existing.id!==currentUser.id)return showToast('Ce nom d\'utilisateur est déjà pris.','error');
   }
   const{error}=await db.from('profiles').update({username:uname,title,bio}).eq('id',currentUser.id);
   if(error)showToast('Erreur: '+error.message,'error');
-  else{showToast('Profil mis a jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
+  else{showToast('Profil mis à jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
 }
-
 function showToast(msg,type){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+type+' show';
-  setTimeout(()=>t.classList.remove('show'),3000);
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3200);
 }
-
 init();
 </script>
 </body>
