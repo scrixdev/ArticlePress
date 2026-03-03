@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!-- UPDATED: LinkedIn-style layout with banner -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -17,158 +16,199 @@ const db=supabase.createClient(SUPA_URL,SUPA_KEY);
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
 a{text-decoration:none;color:inherit}
-nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+
+/* NAV */
+nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 30px rgba(0,0,0,0.4)}
 .logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
 .logo span{color:var(--accent)}
-.nav-links a{color:rgba(255,255,255,0.75);font-size:0.95rem;margin-left:28px;transition:color 0.2s}
-.nav-links a:hover{color:#fff}
-.btn-nav{background:var(--accent);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-left:20px;transition:all 0.2s}
-.btn-nav:hover{background:#b8933e}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-write-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(200,169,110,0.14);color:var(--accent);border:1.5px solid rgba(200,169,110,0.35);border-radius:7px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;transition:all 0.2s}
+.nav-write-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-1px)}
+.nav-divider{width:1px;height:22px;background:rgba(255,255,255,0.1);margin:0 6px}
+.nav-profile-btn{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,0.82);font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:7px 14px 7px 10px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s}
+.nav-profile-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:#fff}
+.nav-avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)}
+.nav-avatar-sm img{width:100%;height:100%;object-fit:cover}
+.btn-logout{background:transparent;color:rgba(255,255,255,0.4);border:1.5px solid rgba(255,255,255,0.09);border-radius:7px;padding:8px 14px;font-family:'Libre Baskerville',serif;font-size:0.74rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-logout:hover{color:#fff;border-color:rgba(255,255,255,0.28)}
+.btn-login-nav{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s}
+.btn-login-nav:hover{background:#b8933e;transform:translateY(-1px)}
 
-.profile-hero{background:linear-gradient(135deg,#1a1a1a,#2c2c2c);padding:60px 40px;text-align:center}
-.avatar-wrap{position:relative;display:inline-block;margin-bottom:20px}
-.profile-avatar{width:130px;height:130px;border-radius:50%;object-fit:cover;border:5px solid rgba(255,255,255,0.15);background:#4a4a4a;display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.5rem;color:#fff;overflow:hidden}
+/* PROFILE CARD */
+.profile-wrapper{max-width:900px;margin:36px auto 0;padding:0 24px}
+.profile-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.1);animation:fadeUp 0.55s cubic-bezier(.22,.68,0,1.2) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* BANNER */
+.banner-zone{position:relative;height:210px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);overflow:hidden;cursor:pointer}
+.banner-zone img.banner-img{width:100%;height:100%;object-fit:cover;display:none}
+.banner-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.25s;background:rgba(0,0,0,0.38)}
+.banner-zone:hover .banner-overlay{opacity:1}
+.banner-overlay-pill{background:rgba(0,0,0,0.55);color:#fff;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:10px 22px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.25)}
+.banner-no-edit{cursor:default!important}
+.banner-no-edit .banner-overlay{display:none!important}
+
+/* PROFILE INFO */
+.profile-info-row{padding:0 36px 28px;display:flex;align-items:flex-end;gap:24px;margin-top:-56px;position:relative;z-index:2}
+
+.avatar-zone{position:relative;flex-shrink:0;cursor:pointer}
+.profile-avatar{width:116px;height:116px;border-radius:50%;border:5px solid #fff;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.2rem;color:#fff;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.22)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
-.avatar-edit-btn{position:absolute;bottom:4px;right:4px;width:34px;height:34px;border-radius:50%;background:var(--accent);border:3px solid #1a1a1a;display:none;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;transition:all 0.2s}
-.avatar-edit-btn:hover{background:#b8933e;transform:scale(1.1)}
-.avatar-wrap:hover .avatar-edit-btn{display:flex}
-.profile-username{font-family:'Libre Baskerville',serif;font-size:2rem;color:#fff;margin-bottom:4px}
-.profile-title{color:var(--accent);font-size:1rem;font-style:italic;margin-bottom:8px}
-.profile-bio{color:rgba(255,255,255,0.55);font-size:1.1rem;font-style:italic;max-width:500px;margin:0 auto 24px}
-.profile-stats{display:flex;gap:30px;justify-content:center;margin-bottom:28px}
-.stat-value{font-family:'Libre Baskerville',serif;font-size:1.6rem;color:#fff;font-weight:700}
-.stat-label{font-size:0.85rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px}
-.btn-edit{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.4);padding:10px 24px;border-radius:6px;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.btn-edit:hover{border-color:#fff;background:rgba(255,255,255,0.05)}
+.avatar-cam{position:absolute;bottom:6px;right:6px;width:32px;height:32px;border-radius:50%;background:var(--accent);border:3px solid #fff;display:none;align-items:center;justify-content:center;font-size:0.9rem;box-shadow:0 2px 10px rgba(0,0,0,0.2);transition:transform 0.2s}
+.avatar-cam:hover{transform:scale(1.12)}
 
-/* Edit panel */
-.edit-panel{display:none;max-width:600px;margin:0 auto;padding:0 40px}
-.edit-card{background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.1);overflow:hidden;margin-top:-30px;position:relative;z-index:10}
-.edit-card-header{background:var(--dark);padding:20px 28px;display:flex;align-items:center;justify-content:space-between}
-.edit-card-header h3{font-family:'Libre Baskerville',serif;color:#fff;font-size:1rem}
-.btn-close-edit{background:none;border:none;color:rgba(255,255,255,0.5);font-size:1.3rem;cursor:pointer;transition:color 0.2s;line-height:1}
-.btn-close-edit:hover{color:#fff}
-.edit-card-body{padding:28px}
-.form-row{margin-bottom:20px}
-label{display:block;font-family:'Libre Baskerville',serif;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mid);margin-bottom:8px}
-input[type=text],textarea.bio-input{width:100%;border:2px solid var(--border);border-radius:6px;padding:12px 15px;font-family:'Crimson Text',serif;font-size:1.05rem;color:var(--dark);background:var(--cream);transition:border-color 0.2s}
-input:focus,textarea:focus{outline:none;border-color:var(--dark);background:#fff}
+.profile-text{flex:1;min-width:0;padding-bottom:6px}
+.profile-username{font-family:'Libre Baskerville',serif;font-size:1.65rem;font-weight:700;color:var(--dark);margin-bottom:2px;line-height:1.2}
+.profile-title-txt{color:var(--accent);font-size:1rem;font-style:italic;margin-bottom:6px;min-height:1.4em}
+.profile-bio-txt{color:var(--mid);font-size:1rem;line-height:1.6;max-width:480px}
+
+.profile-actions-col{display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-bottom:6px;flex-shrink:0}
+.stat-pill{text-align:center;background:var(--cream);border-radius:10px;padding:10px 22px}
+.stat-pill-value{font-family:'Libre Baskerville',serif;font-size:1.6rem;font-weight:700;color:var(--dark);line-height:1}
+.stat-pill-label{font-size:0.7rem;color:var(--light);text-transform:uppercase;letter-spacing:1.5px;margin-top:3px}
+.btn-edit-profile{background:var(--dark);color:#fff;border:none;border-radius:8px;padding:11px 24px;font-family:'Libre Baskerville',serif;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.btn-edit-profile:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+
+/* EDIT PANEL */
+.edit-panel{display:none;border-top:2px solid var(--border);padding:28px 36px 32px;background:#faf9f7}
+.edit-panel-title{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;margin-bottom:20px;color:var(--dark)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row{margin-bottom:0}
+.form-row.full{grid-column:1/-1}
+label{display:block;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mid);margin-bottom:7px}
+input[type=text],textarea.bio-input{width:100%;border:2px solid var(--border);border-radius:7px;padding:11px 14px;font-family:'Crimson Text',serif;font-size:1.02rem;color:var(--dark);background:#fff;transition:border-color 0.2s}
+input:focus,textarea:focus{outline:none;border-color:var(--dark)}
 textarea.bio-input{resize:vertical;min-height:80px}
-
-.avatar-upload-zone{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
-.avatar-upload-zone:hover{border-color:var(--dark);background:#f8f7f5}
-.avatar-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;border:3px solid var(--border)}
-.avatar-upload-zone p{font-size:0.9rem;color:var(--light)}
-.avatar-upload-zone strong{font-family:'Libre Baskerville',serif;font-size:0.8rem;color:var(--mid)}
-.avatar-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-
-.edit-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:10px;border-top:2px solid var(--border)}
-.btn-cancel{background:#e8e6e3;color:var(--dark);border:none;border-radius:6px;padding:11px 22px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.edit-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:18px;border-top:2px solid var(--border)}
+.btn-cancel{background:#e8e6e3;color:var(--dark);border:none;border-radius:7px;padding:11px 22px;font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
 .btn-cancel:hover{background:#d0ccc7}
-.btn-save-profile{background:var(--dark);color:#fff;border:none;border-radius:6px;padding:11px 22px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
-.btn-save-profile:hover{background:var(--mid);transform:translateY(-1px)}
+.btn-save{background:var(--dark);color:#fff;border:none;border-radius:7px;padding:11px 26px;font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-save:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,0.15)}
 
-.section{max-width:1200px;margin:0 auto;padding:50px 40px}
-.section h2{font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:30px;padding-bottom:14px;border-bottom:2px solid var(--border)}
-.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+/* ARTICLES */
+.articles-section{max-width:900px;margin:28px auto 60px;padding:0 24px}
+.articles-section h2{font-family:'Libre Baskerville',serif;font-size:1.2rem;margin-bottom:22px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
 .article-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s;cursor:pointer}
-.article-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12)}
-.card-img{width:100%;height:180px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden}
+.article-card:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(0,0,0,0.12)}
+.card-img{width:100%;height:160px;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden}
 .card-img img{width:100%;height:100%;object-fit:cover}
-.card-body{padding:22px}
-.card-date{font-family:'Libre Baskerville',serif;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--light);margin-bottom:8px}
-.card-excerpt{font-size:1rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.card-actions{padding:0 22px 18px;display:flex;gap:10px}
-.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:5px;padding:7px 14px;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.card-body{padding:18px}
+.card-date{font-family:'Libre Baskerville',serif;font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--light);margin-bottom:7px}
+.card-excerpt{font-size:0.98rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-actions{padding:0 18px 14px;display:flex;gap:8px}
+.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:5px;padding:6px 14px;font-family:'Libre Baskerville',serif;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all 0.2s}
 .btn-del:hover{background:#f5c6c6}
-.empty-state{text-align:center;padding:60px;color:var(--light)}
-.loader{text-align:center;padding:60px;color:var(--light);font-style:italic}
-footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:30px;font-size:0.9rem;margin-top:40px}
-footer span{color:var(--accent)}
+.empty-state{text-align:center;padding:50px;color:var(--light)}
+.loader{text-align:center;padding:50px;color:var(--light);font-style:italic}
 
-/* Toast */
-.toast{position:fixed;bottom:30px;right:30px;background:var(--dark);color:#fff;padding:14px 24px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:2000}
+.toast{position:fixed;bottom:30px;right:30px;background:var(--dark);color:#fff;padding:14px 24px;border-radius:9px;font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:2000}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{background:#27ae60}
 .toast.error{background:#c0392b}
+
+footer{background:var(--dark);color:rgba(255,255,255,0.4);text-align:center;padding:32px;font-size:0.9rem;margin-top:20px}
+footer span{color:var(--accent)}
+
+@media(max-width:660px){
+  nav{padding:0 20px}
+  .profile-info-row{flex-direction:column;align-items:flex-start;margin-top:-44px;gap:14px}
+  .profile-actions-col{flex-direction:row;align-items:center;width:100%}
+  .form-grid{grid-template-columns:1fr}
+  .profile-wrapper,.articles-section{padding:0 14px}
+}
 </style>
 </head>
 <body>
+
 <nav>
   <a href="index.html" class="logo">Article<span>Press</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="index.html">Accueil</a>
-    <a href="editor.html" id="navWrite" style="display:none">Ecrire</a>
-    <a href="#" id="navProfile" style="display:none"></a>
-    <a href="auth.html" id="navLogin">Connexion</a>
-    <button class="btn-nav" id="navLogout" style="display:none" onclick="logout()">Deconnexion</button>
+  <div class="nav-right" id="navRight">
+    <a href="auth.html" class="btn-login-nav">Connexion</a>
   </div>
 </nav>
 
-<div class="profile-hero">
-  <div class="avatar-wrap">
-    <div class="profile-avatar" id="profileAvatar">?</div>
-    <div class="avatar-edit-btn" id="avatarEditBtn" title="Changer la photo" onclick="document.getElementById('avatarFileInput').click()">📷</div>
-    <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="quickAvatarChange(this)">
-  </div>
-  <div class="profile-username" id="profileUsername">Chargement...</div>
-  <div class="profile-title" id="profileTitle"></div>
-  <div class="profile-bio" id="profileBio"></div>
-  <div class="profile-stats">
-    <div class="stat"><div class="stat-value" id="articleCount">-</div><div class="stat-label">Articles</div></div>
-  </div>
-  <button class="btn-edit" id="editBtn" style="display:none" onclick="toggleEdit()">Modifier mon profil</button>
-</div>
+<div class="profile-wrapper">
+  <div class="profile-card">
 
-<div class="edit-panel" id="editPanel">
-  <div class="edit-card">
-    <div class="edit-card-header">
-      <h3>Modifier mon profil</h3>
-      <button class="btn-close-edit" onclick="toggleEdit()">×</button>
+    <!-- BANNIERE -->
+    <div class="banner-zone" id="bannerZone">
+      <img class="banner-img" id="bannerImg" src="" alt="">
+      <div class="banner-overlay"><div class="banner-overlay-pill">📷 Changer la banniere</div></div>
+      <input type="file" id="bannerInput" accept="image/*" style="display:none" onchange="quickBannerChange(this)">
     </div>
-    <div class="edit-card-body">
-      <div class="form-row">
-        <label>Photo de profil</label>
-        <div class="avatar-upload-zone" onclick="document.getElementById('editAvatarFile').click()">
-          <img id="editAvatarPreview" class="avatar-preview" src="" alt="">
-          <strong>Cliquez pour changer votre photo</strong>
-          <p>JPG, PNG — chargement direct depuis votre appareil</p>
-          <input type="file" id="editAvatarFile" accept="image/*" onchange="previewAvatar(this)" onclick="event.stopPropagation()">
-        </div>
+
+    <!-- INFO ROW -->
+    <div class="profile-info-row">
+
+      <!-- AVATAR -->
+      <div class="avatar-zone" id="avatarZone">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <div class="avatar-cam" id="avatarCam">📷</div>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="quickAvatarChange(this)">
       </div>
-      <div class="form-row"><label>Nom d'utilisateur</label><input type="text" id="editUsername" placeholder="jean_dupont"></div>
-      <div class="form-row"><label>Fonction / Titre</label><input type="text" id="editTitle" placeholder="Ex: Journaliste, Redacteur en chef..."></div>
-      <div class="form-row"><label>Bio</label><textarea class="bio-input" id="editBio" placeholder="Decris-toi en quelques mots..."></textarea></div>
+
+      <!-- TEXTE -->
+      <div class="profile-text">
+        <div class="profile-username" id="profileUsername">Chargement...</div>
+        <div class="profile-title-txt" id="profileTitleTxt"></div>
+        <div class="profile-bio-txt" id="profileBioTxt"></div>
+      </div>
+
+      <!-- STATS + BTN -->
+      <div class="profile-actions-col">
+        <div class="stat-pill">
+          <div class="stat-pill-value" id="articleCount">-</div>
+          <div class="stat-pill-label">Articles</div>
+        </div>
+        <button class="btn-edit-profile" id="editBtn" style="display:none" onclick="toggleEdit()">Modifier le profil</button>
+      </div>
+
+    </div>
+
+    <!-- EDIT PANEL -->
+    <div class="edit-panel" id="editPanel">
+      <div class="edit-panel-title">Modifier mon profil</div>
+      <div class="form-grid">
+        <div class="form-row"><label>Nom d'utilisateur</label><input type="text" id="editUsername" placeholder="jean_dupont"></div>
+        <div class="form-row"><label>Fonction / Titre</label><input type="text" id="editTitle" placeholder="Journaliste, Redacteur..."></div>
+        <div class="form-row full"><label>Bio</label><textarea class="bio-input" id="editBio" placeholder="Decris-toi en quelques mots..."></textarea></div>
+      </div>
       <div class="edit-actions">
         <button class="btn-cancel" onclick="toggleEdit()">Annuler</button>
-        <button class="btn-save-profile" onclick="saveProfile()">Sauvegarder</button>
+        <button class="btn-save" onclick="saveProfile()">Sauvegarder</button>
       </div>
     </div>
+
   </div>
 </div>
 
-<div class="section">
-  <h2 id="articlesTitle">Articles publies</h2>
-  <div class="articles-list" id="articlesList">
-    <div class="loader">Chargement...</div>
-  </div>
+<!-- ARTICLES -->
+<div class="articles-section">
+  <h2>Articles publies</h2>
+  <div class="articles-list" id="articlesList"><div class="loader">Chargement...</div></div>
 </div>
 
 <footer><p><span>ArticlePress</span> &mdash; 2024</p></footer>
 <div class="toast" id="toast"></div>
 
 <script>
-let currentUser=null, profileData=null, newAvatarData=null;
-const username=new URLSearchParams(window.location.search).get('user');
+let currentUser=null, profileData=null, isOwn=false;
+const urlUsername=new URLSearchParams(window.location.search).get('user');
 
 async function initNav(){
   const{data:{session}}=await db.auth.getSession();
+  const navRight=document.getElementById('navRight');
   if(session){
-    document.getElementById('navLogin').style.display='none';
-    document.getElementById('navWrite').style.display='inline';
-    document.getElementById('navLogout').style.display='inline';
-    const{data:p}=await db.from('profiles').select('username').eq('id',session.user.id).single();
-    if(p){const a=document.getElementById('navProfile');a.href='profile.html?user='+p.username;a.style.display='inline';a.textContent=p.username;}
+    const{data:p}=await db.from('profiles').select('username,avatar_url').eq('id',session.user.id).single();
+    const uname=p?p.username:'profil';
+    const av=p&&p.avatar_url;
+    const avatarHtml=av?`<div class="nav-avatar-sm"><img src="${av}" alt=""></div>`:`<div class="nav-avatar-sm">${uname[0].toUpperCase()}</div>`;
+    navRight.innerHTML=`
+      <a href="editor.html" class="nav-write-btn">✏&nbsp;Ecrire</a>
+      <div class="nav-divider"></div>
+      <a href="profile.html?user=${uname}" class="nav-profile-btn">${avatarHtml}<span>${uname}</span></a>
+      <button class="btn-logout" onclick="logout()">Deconnexion</button>`;
   }
 }
 async function logout(){await db.auth.signOut();window.location.href='index.html';}
@@ -177,89 +217,103 @@ initNav();
 async function init(){
   const{data:{session}}=await db.auth.getSession();
   if(session)currentUser=session.user;
-  if(!username){
+
+  if(!urlUsername){
     if(!currentUser){window.location.href='auth.html';return;}
     const{data:p}=await db.from('profiles').select('username').eq('id',currentUser.id).single();
     if(p)window.location.href='profile.html?user='+p.username;
     return;
   }
-  const{data:p}=await db.from('profiles').select('*').eq('username',username).single();
+
+  const{data:p}=await db.from('profiles').select('*').eq('username',urlUsername).single();
   if(!p){document.getElementById('profileUsername').textContent='Profil introuvable';return;}
   profileData=p;
+  isOwn=!!(currentUser&&currentUser.id===p.id);
+
   renderProfile(p);
-  if(currentUser&&currentUser.id===p.id){
-    document.getElementById('editBtn').style.display='inline-block';
+
+  if(isOwn){
+    // Activer edition banniere
+    document.getElementById('bannerZone').style.cursor='pointer';
+    document.getElementById('bannerZone').onclick=()=>document.getElementById('bannerInput').click();
+    // Activer edition avatar
+    const cam=document.getElementById('avatarCam');
+    cam.style.display='flex';
+    document.getElementById('avatarZone').onclick=()=>document.getElementById('avatarInput').click();
+    // Bouton modifier
+    document.getElementById('editBtn').style.display='block';
+    // Remplir form
     document.getElementById('editUsername').value=p.username||'';
     document.getElementById('editTitle').value=p.title||'';
     document.getElementById('editBio').value=p.bio||'';
-    const prev=document.getElementById('editAvatarPreview');
-    prev.src=p.avatar_url||'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23e8e6e3" width="80" height="80" rx="40"/%3E%3C/svg%3E';
     loadArticlesOwn(p.id);
   } else {
+    // Pas proprio : banniere non cliquable
+    document.getElementById('bannerZone').classList.add('banner-no-edit');
+    document.getElementById('avatarZone').style.cursor='default';
     loadArticlesPublic(p.id);
   }
 }
 
 function renderProfile(p){
   document.getElementById('profileUsername').textContent=p.username||'Utilisateur';
-  document.getElementById('profileBio').textContent=p.bio||'';
-  document.getElementById('profileTitle').textContent=p.title||'';
+  document.getElementById('profileTitleTxt').textContent=p.title||'';
+  document.getElementById('profileBioTxt').textContent=p.bio||'';
   const av=document.getElementById('profileAvatar');
   if(p.avatar_url){av.innerHTML=`<img src="${p.avatar_url}" alt="">`;}
   else{av.textContent=(p.username||'?')[0].toUpperCase();}
+  const banner=document.getElementById('bannerImg');
+  if(p.banner_url){banner.src=p.banner_url;banner.style.display='block';}
   document.title='ArticlePress - '+p.username;
-  // Show avatar edit button if own profile
-  if(currentUser&&currentUser.id===p.id){
-    document.getElementById('avatarEditBtn').style.display='flex';
-  }
 }
 
-function previewAvatar(input){
+async function quickAvatarChange(input){
+  if(!currentUser)return;
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=e=>{
-    newAvatarData=e.target.result;
-    document.getElementById('editAvatarPreview').src=newAvatarData;
+  reader.onload=async e=>{
+    const d=e.target.result;
+    const{error}=await db.from('profiles').update({avatar_url:d}).eq('id',currentUser.id);
+    if(error)showToast('Erreur: '+error.message,'error');
+    else{document.getElementById('profileAvatar').innerHTML=`<img src="${d}" alt="">`;showToast('Photo mise a jour !','success');}
   };
   reader.readAsDataURL(file);
 }
 
-async function quickAvatarChange(input){
-  const file=input.files[0];if(!file||!currentUser)return;
+async function quickBannerChange(input){
+  if(!currentUser)return;
+  const file=input.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=async e=>{
-    const avatarData=e.target.result;
-    const{error}=await db.from('profiles').update({avatar_url:avatarData}).eq('id',currentUser.id);
-    if(error){showToast('Erreur: '+error.message,'error');}
-    else{
-      document.getElementById('profileAvatar').innerHTML=`<img src="${avatarData}" alt="">`;
-      showToast('Photo mise a jour !','success');
-    }
+    const d=e.target.result;
+    const{error}=await db.from('profiles').update({banner_url:d}).eq('id',currentUser.id);
+    if(error)showToast('Erreur: '+error.message,'error');
+    else{const b=document.getElementById('bannerImg');b.src=d;b.style.display='block';showToast('Banniere mise a jour !','success');}
   };
   reader.readAsDataURL(file);
 }
 
 async function loadArticlesPublic(userId){
-  const{data:articles}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
-  renderArticles(articles,false);
+  const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
+  renderArticles(a,false);
 }
 async function loadArticlesOwn(userId){
-  const{data:articles}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
-  renderArticles(articles,true);
+  const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
+  renderArticles(a,true);
 }
-function renderArticles(articles,isOwn){
+function renderArticles(articles,own){
   document.getElementById('articleCount').textContent=articles?articles.length:0;
   const list=document.getElementById('articlesList');
   if(!articles||articles.length===0){list.innerHTML='<div class="empty-state"><p>Aucun article publie pour le moment.</p></div>';return;}
   list.innerHTML=articles.map(a=>{
-    const preview=a.content?a.content.substring(0,180)+'...':'';
+    const preview=a.content?a.content.substring(0,160)+'...':'';
     return `<div class="article-card">
       <div class="card-img">${a.image_data?`<img src="${a.image_data}">`:'📰'}</div>
       <div class="card-body">
         <div class="card-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
         <div class="card-excerpt">${preview}</div>
       </div>
-      ${isOwn?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}')">Supprimer</button></div>`:''}</div>`;
+      ${own?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}')">Supprimer</button></div>`:''}</div>`;
   }).join('');
 }
 
@@ -271,8 +325,9 @@ async function deleteArticle(id){
 
 function toggleEdit(){
   const p=document.getElementById('editPanel');
-  p.style.display=p.style.display==='block'?'none':'block';
-  if(p.style.display==='block')p.scrollIntoView({behavior:'smooth',block:'start'});
+  const open=p.style.display==='block';
+  p.style.display=open?'none':'block';
+  if(!open)setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
 }
 
 async function saveProfile(){
@@ -281,11 +336,9 @@ async function saveProfile(){
   const title=document.getElementById('editTitle').value.trim();
   const bio=document.getElementById('editBio').value.trim();
   if(!uname)return showToast('Le nom utilisateur est requis.','error');
-  const updates={username:uname,title,bio};
-  if(newAvatarData)updates.avatar_url=newAvatarData;
-  const{error}=await db.from('profiles').update(updates).eq('id',currentUser.id);
-  if(error){showToast('Erreur: '+error.message,'error');}
-  else{showToast('Profil mis a jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,1000);}
+  const{error}=await db.from('profiles').update({username:uname,title,bio}).eq('id',currentUser.id);
+  if(error)showToast('Erreur: '+error.message,'error');
+  else{showToast('Profil mis a jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
 }
 
 function showToast(msg,type){
