@@ -49,10 +49,25 @@ nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:c
 .profile-info-row{position:absolute;bottom:0;left:0;right:0;padding:0 56px 32px;display:flex;align-items:flex-end;gap:28px;z-index:4}
 .avatar-zone{position:relative;flex-shrink:0;cursor:pointer}
 .profile-avatar{width:136px;height:136px;border-radius:50%;border:4px solid #fff;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.6rem;color:#fff;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.45);transition:transform 0.3s,box-shadow 0.3s}
-.avatar-zone:hover .profile-avatar{transform:scale(1.04);box-shadow:0 12px 40px rgba(0,0,0,0.55)}
 .profile-avatar img{width:100%;height:100%;object-fit:cover}
-.avatar-cam{position:absolute;bottom:6px;right:6px;width:34px;height:34px;border-radius:50%;background:var(--accent);border:3px solid #fff;display:none;align-items:center;justify-content:center;font-size:0.9rem;box-shadow:0 2px 10px rgba(0,0,0,0.3);transition:transform 0.2s;cursor:pointer}
-.avatar-cam:hover{transform:scale(1.15)}
+/* Full hover overlay on avatar */
+.avatar-overlay{
+  position:absolute;inset:0;
+  border-radius:50%;
+  background:rgba(0,0,0,0.55);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;
+  opacity:0;
+  transition:opacity 0.25s cubic-bezier(.22,.68,0,1.2);
+  border:4px solid #fff;
+  box-sizing:border-box;
+  pointer-events:none;
+}
+.avatar-overlay .cam-icon{font-size:1.6rem;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))}
+.avatar-overlay .cam-label{font-family:'Libre Baskerville',serif;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.9)}
+.avatar-zone.editable:hover .avatar-overlay{opacity:1}
+.avatar-zone.editable:hover .profile-avatar{transform:scale(1.03);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+.avatar-cam{display:none}
 .profile-text{flex:1;min-width:0;padding-bottom:6px}
 .profile-username{font-family:'Libre Baskerville',serif;font-size:2.4rem;font-weight:700;color:#ffffff;margin-bottom:5px;line-height:1.1;text-shadow:0 2px 20px rgba(0,0,0,0.7);letter-spacing:0.2px}
 .profile-title-txt{color:var(--accent);font-size:1.05rem;font-style:italic;margin-bottom:8px;min-height:1.4em;text-shadow:0 1px 8px rgba(0,0,0,0.5)}
@@ -133,7 +148,11 @@ footer span{color:var(--accent)}
     <div class="profile-info-row">
       <div class="avatar-zone" id="avatarZone">
         <div class="profile-avatar" id="profileAvatar">?</div>
-        <div class="avatar-cam" id="avatarCam">&#128247;</div>
+        <div class="avatar-overlay" id="avatarOverlay">
+          <div class="cam-icon">&#128247;</div>
+          <div class="cam-label">Changer</div>
+        </div>
+        <div class="avatar-cam" id="avatarCam" style="display:none"></div>
         <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="quickAvatarChange(this)">
       </div>
       <div class="profile-text">
@@ -209,7 +228,7 @@ async function init(){
   if(isOwn){
     document.getElementById('bannerZone').style.cursor='pointer';
     document.getElementById('bannerZone').onclick=(e)=>{if(e.target.closest('.profile-info-row')||e.target.closest('#editPanel'))return;document.getElementById('bannerInput').click();};
-    const cam=document.getElementById('avatarCam');cam.style.display='flex';
+    document.getElementById('avatarZone').classList.add('editable');
     document.getElementById('avatarZone').onclick=(e)=>{e.stopPropagation();document.getElementById('avatarInput').click();};
     document.getElementById('editBtn').style.display='block';
     document.getElementById('editUsername').value=p.username||'';
