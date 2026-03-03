@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ArticlePress - Profil</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL="https://tophvdcznopyqwzzzghi.supabase.co";
+const SUPA_KEY="sb_publishable_2i-R1PGEdnbtnxEJL8p5Sw_IJXUypOr";
+const db=supabase.createClient(SUPA_URL,SUPA_KEY);
+</script>
+
+<style>
+
+:root{
+  --dark:#1a1a1a;
+  --mid:#4a4a4a;
+  --light:#888;
+  --cream:#f5f3f0;
+  --white:#ffffff;
+  --accent:#c8a96e;
+  --border:#e8e6e3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
+.logo span{color:var(--accent)}
+.nav-links a{color:rgba(255,255,255,0.75);font-size:0.95rem;margin-left:28px;transition:color 0.2s}
+.nav-links a:hover{color:#fff}
+.btn-nav{background:var(--accent);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-left:20px;transition:all 0.2s}
+.btn-nav:hover{background:#b8933e;transform:translateY(-1px)}
+.profile-hero{background:linear-gradient(135deg,#1a1a1a,#2c2c2c);padding:60px 40px;text-align:center}
+.profile-avatar{width:130px;height:130px;border-radius:50%;object-fit:cover;border:5px solid rgba(255,255,255,0.15);margin-bottom:20px;background:#4a4a4a;display:inline-flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.5rem;color:#fff;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-username{font-family:'Libre Baskerville',serif;font-size:2rem;color:#fff;margin-bottom:8px}
+.profile-bio{color:rgba(255,255,255,0.55);font-size:1.1rem;font-style:italic;max-width:500px;margin:0 auto 24px}
+.profile-stats{display:flex;gap:30px;justify-content:center;margin-bottom:28px}
+.stat{text-align:center}
+.stat-value{font-family:'Libre Baskerville',serif;font-size:1.6rem;color:#fff;font-weight:700}
+.stat-label{font-size:0.85rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px}
+.btn-edit{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.4);padding:10px 24px;border-radius:6px;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-edit:hover{border-color:#fff;background:rgba(255,255,255,0.05)}
+.edit-panel{display:none;background:#fff;border-radius:12px;padding:30px;margin:30px auto;max-width:600px;box-shadow:0 10px 40px rgba(0,0,0,0.1)}
+.edit-panel h3{font-family:'Libre Baskerville',serif;font-size:1.2rem;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.form-row{margin-bottom:18px}
+label{display:block;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mid);margin-bottom:8px}
+input[type=text],textarea.bio-input{width:100%;border:2px solid var(--border);border-radius:6px;padding:12px 15px;font-family:'Crimson Text',serif;font-size:1.05rem;color:var(--dark);background:var(--cream);transition:border-color 0.2s}
+input:focus,textarea:focus{outline:none;border-color:var(--dark);background:#fff}
+textarea.bio-input{resize:vertical;min-height:80px}
+.btn-save-profile{background:var(--dark);color:#fff;border:none;border-radius:6px;padding:12px 28px;font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s}
+.btn-save-profile:hover{background:var(--mid);transform:translateY(-1px)}
+.section{max-width:1200px;margin:0 auto;padding:50px 40px}
+.section h2{font-family:'Libre Baskerville',serif;font-size:1.4rem;margin-bottom:30px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.articles-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.article-card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.07);transition:all 0.3s;cursor:pointer}
+.article-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12)}
+.card-img{width:100%;height:180px;object-fit:cover;background:linear-gradient(135deg,#e8e6e3,#d0ccc7);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.card-body{padding:22px}
+.card-date{font-family:'Libre Baskerville',serif;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;color:var(--light);margin-bottom:8px}
+.card-excerpt{font-size:1rem;color:var(--mid);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-actions{padding:0 22px 18px;display:flex;gap:10px}
+.btn-del{background:#fde8e8;color:#c0392b;border:none;border-radius:5px;padding:7px 14px;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-del:hover{background:#f5c6c6}
+.empty-state{text-align:center;padding:60px;color:var(--light)}
+.loader{text-align:center;padding:60px;color:var(--light);font-style:italic}
+footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:30px;font-size:0.9rem}
+footer span{color:var(--accent)}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="logo">Article<span>Press</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Accueil</a>
+    <a href="editor.html" id="navWrite" style="display:none">Ecrire</a>
+    <a href="#" id="navProfile" style="display:none"></a>
+    <a href="auth.html" id="navLogin">Connexion</a>
+    <button class="btn-nav" id="navLogout" style="display:none" onclick="logout()">Deconnexion</button>
+  </div>
+</nav>
+
+<div class="profile-hero">
+  <div class="profile-avatar" id="profileAvatar">?</div>
+  <div class="profile-username" id="profileUsername">Chargement...</div>
+  <div class="profile-bio" id="profileBio"></div>
+  <div class="profile-stats">
+    <div class="stat"><div class="stat-value" id="articleCount">-</div><div class="stat-label">Articles</div></div>
+  </div>
+  <button class="btn-edit" id="editBtn" style="display:none" onclick="toggleEdit()">Modifier mon profil</button>
+</div>
+
+<div class="edit-panel" id="editPanel">
+  <h3>Modifier mon profil</h3>
+  <div class="form-row"><label>Nom d'utilisateur</label><input type="text" id="editUsername" placeholder="jean_dupont"></div>
+  <div class="form-row"><label>Bio</label><textarea class="bio-input" id="editBio" placeholder="Decris-toi en quelques mots..."></textarea></div>
+  <div class="form-row"><label>Photo de profil (URL ou base64)</label><input type="text" id="editAvatar" placeholder="https://..."></div>
+  <button class="btn-save-profile" onclick="saveProfile()">Sauvegarder</button>
+</div>
+
+<div class="section">
+  <h2 id="articlesTitle">Articles publies</h2>
+  <div class="articles-list" id="articlesList">
+    <div class="loader">Chargement...</div>
+  </div>
+</div>
+
+<footer><p><span>ArticlePress</span> &mdash; 2024</p></footer>
+
+<script>
+
+async function initNav(){
+  const{data:{session}}=await db.auth.getSession();
+  if(session){
+    document.getElementById('navLogin').style.display='none';
+    document.getElementById('navWrite').style.display='inline';
+    document.getElementById('navLogout').style.display='inline';
+    const{data:profile}=await db.from('profiles').select('username').eq('id',session.user.id).single();
+    if(profile){
+      const a=document.getElementById('navProfile');
+      a.href='profile.html?user='+profile.username;
+      a.style.display='inline';
+      a.textContent=profile.username;
+    }
+  }
+}
+async function logout(){
+  await db.auth.signOut();
+  window.location.href='index.html';
+}
+initNav();
+
+let currentUser=null;
+let profileData=null;
+const username=new URLSearchParams(window.location.search).get('user');
+
+async function init(){
+  const{data:{session}}=await db.auth.getSession();
+  if(session)currentUser=session.user;
+  if(!username){
+    if(!currentUser){window.location.href='auth.html';return;}
+    const{data:p}=await db.from('profiles').select('username').eq('id',currentUser.id).single();
+    if(p)window.location.href='profile.html?user='+p.username;
+    return;
+  }
+  const{data:p}=await db.from('profiles').select('*').eq('username',username).single();
+  if(!p){document.getElementById('profileUsername').textContent='Profil introuvable';return;}
+  profileData=p;
+  renderProfile(p);
+  if(currentUser&&currentUser.id===p.id){
+    document.getElementById('editBtn').style.display='inline-block';
+    document.getElementById('editUsername').value=p.username||'';
+    document.getElementById('editBio').value=p.bio||'';
+    document.getElementById('editAvatar').value=p.avatar_url||'';
+    loadArticlesOwn(p.id);
+  } else {
+    loadArticlesPublic(p.id);
+  }
+}
+
+function renderProfile(p){
+  document.getElementById('profileUsername').textContent=p.username||'Utilisateur';
+  document.getElementById('profileBio').textContent=p.bio||'';
+  const av=document.getElementById('profileAvatar');
+  if(p.avatar_url){
+    av.innerHTML=`<img src="${p.avatar_url}" alt="">`;
+  } else {
+    av.textContent=(p.username||'?')[0].toUpperCase();
+  }
+  document.title='ArticlePress - '+p.username;
+}
+
+async function loadArticlesPublic(userId){
+  const{data:articles}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
+  renderArticles(articles,false);
+}
+
+async function loadArticlesOwn(userId){
+  const{data:articles}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});
+  renderArticles(articles,true);
+}
+
+function renderArticles(articles,isOwn){
+  document.getElementById('articleCount').textContent=articles?articles.length:0;
+  const list=document.getElementById('articlesList');
+  if(!articles||articles.length===0){
+    list.innerHTML='<div class="empty-state"><p>Aucun article publie pour le moment.</p></div>';
+    return;
+  }
+  list.innerHTML=articles.map(a=>{
+    const preview=a.content?a.content.substring(0,180)+'...':'';
+    return `<div class="article-card">
+      <div class="card-img">${a.image_data?`<img src="${a.image_data}">`:'📰'}</div>
+      <div class="card-body">
+        <div class="card-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
+        <div class="card-excerpt">${preview}</div>
+      </div>
+      ${isOwn?`<div class="card-actions"><button class="btn-del" onclick="deleteArticle('${a.id}')">Supprimer</button></div>`:''}</div>`;
+  }).join('');
+}
+
+async function deleteArticle(id){
+  if(!confirm('Supprimer cet article ?'))return;
+  await db.from('articles').delete().eq('id',id).eq('user_id',currentUser.id);
+  init();
+}
+
+function toggleEdit(){
+  const p=document.getElementById('editPanel');
+  p.style.display=p.style.display==='block'?'none':'block';
+}
+
+async function saveProfile(){
+  if(!currentUser)return;
+  const username=document.getElementById('editUsername').value.trim();
+  const bio=document.getElementById('editBio').value.trim();
+  const avatar_url=document.getElementById('editAvatar').value.trim();
+  if(!username)return alert('Le nom utilisateur est requis.');
+  const{error}=await db.from('profiles').update({username,bio,avatar_url}).eq('id',currentUser.id);
+  if(error)alert('Erreur: '+error.message);
+  else{
+    alert('Profil mis a jour !');
+    window.location.href='profile.html?user='+username;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

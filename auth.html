@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ArticlePress - Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL="https://tophvdcznopyqwzzzghi.supabase.co";
+const SUPA_KEY="sb_publishable_2i-R1PGEdnbtnxEJL8p5Sw_IJXUypOr";
+const db=supabase.createClient(SUPA_URL,SUPA_KEY);
+</script>
+
+<style>
+
+:root{
+  --dark:#1a1a1a;
+  --mid:#4a4a4a;
+  --light:#888;
+  --cream:#f5f3f0;
+  --white:#ffffff;
+  --accent:#c8a96e;
+  --border:#e8e6e3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+body{min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
+.logo span{color:var(--accent)}
+nav a{color:rgba(255,255,255,0.7);font-size:0.95rem;transition:color 0.2s}
+nav a:hover{color:#fff}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.1);width:100%;max-width:440px;overflow:hidden}
+.card-header{background:var(--dark);padding:36px 40px;text-align:center}
+.card-header h1{font-family:'Libre Baskerville',serif;color:#fff;font-size:1.6rem;margin-bottom:8px}
+.card-header p{color:rgba(255,255,255,0.55);font-size:1.05rem;font-style:italic}
+.tabs{display:flex;background:#f8f7f5}
+.tab{flex:1;padding:14px;border:none;background:none;cursor:pointer;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mid);border-bottom:3px solid transparent;transition:all 0.2s}
+.tab.active{background:#fff;color:var(--dark);border-bottom-color:var(--dark)}
+.card-body{padding:36px 40px}
+.form-group{margin-bottom:22px}
+label{display:block;font-family:'Libre Baskerville',serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--mid);margin-bottom:8px}
+input[type=text],input[type=email],input[type=password]{width:100%;border:2px solid var(--border);border-radius:6px;padding:12px 15px;font-family:'Crimson Text',serif;font-size:1.05rem;color:var(--dark);background:var(--cream);transition:border-color 0.2s}
+input:focus{outline:none;border-color:var(--dark);background:#fff}
+.btn{width:100%;background:var(--dark);color:#fff;border:none;border-radius:6px;padding:14px;font-family:'Libre Baskerville',serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.btn:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.alert{padding:12px 15px;border-radius:6px;font-size:0.98rem;margin-bottom:18px;display:none}
+.error{background:#fde8e8;color:#c0392b;border:1px solid #f5c6c6;display:block}
+.success{background:#e8f5e9;color:#27ae60;border:1px solid #c8e6c9;display:block}
+.panel{display:none}.panel.active{display:block}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Article<span>Press</span></a>
+  <a href="index.html">Retour accueil</a>
+</nav>
+<main>
+  <div class="card">
+    <div class="card-header">
+      <h1>ArticlePress</h1>
+      <p>Ecrivez. Publiez. Partagez.</p>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">Connexion</button>
+      <button class="tab" onclick="switchTab('signup')">Inscription</button>
+    </div>
+    <div class="card-body">
+      <div id="alertBox" class="alert"></div>
+      <div id="loginPanel" class="panel active">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail" placeholder="votre@email.com"></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+        <button class="btn" id="loginBtn" onclick="doLogin()">Se connecter</button>
+      </div>
+      <div id="signupPanel" class="panel">
+        <div class="form-group"><label>Nom utilisateur</label><input type="text" id="signupUsername" placeholder="jean_dupont"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="votre@email.com"></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="signupPassword" placeholder="Minimum 6 caracteres"></div>
+        <button class="btn" id="signupBtn" onclick="doSignup()">Creer mon compte</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+function switchTab(t){
+  document.getElementById('loginPanel').classList.toggle('active',t==='login');
+  document.getElementById('signupPanel').classList.toggle('active',t==='signup');
+  document.querySelectorAll('.tab').forEach((tab,i)=>tab.classList.toggle('active',(t==='login'&&i===0)||(t==='signup'&&i===1)));
+  const b=document.getElementById('alertBox');b.className='alert';b.textContent='';
+}
+function showAlert(msg,type){const b=document.getElementById('alertBox');b.textContent=msg;b.className='alert '+type;}
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPassword').value;
+  if(!email||!pass)return showAlert('Remplis tous les champs.','error');
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true;btn.textContent='Connexion...';
+  const{error}=await db.auth.signInWithPassword({email,password:pass});
+  if(error){showAlert('Email ou mot de passe incorrect.','error');btn.disabled=false;btn.textContent='Se connecter';}
+  else{showAlert('Connecte!','success');setTimeout(()=>window.location.href='index.html',800);}
+}
+async function doSignup(){
+  const username=document.getElementById('signupUsername').value.trim();
+  const email=document.getElementById('signupEmail').value.trim();
+  const pass=document.getElementById('signupPassword').value;
+  if(!username||!email||!pass)return showAlert('Remplis tous les champs.','error');
+  if(pass.length<6)return showAlert('Mot de passe trop court (min. 6).','error');
+  const btn=document.getElementById('signupBtn');
+  btn.disabled=true;btn.textContent='Creation...';
+  const{error}=await db.auth.signUp({email,password:pass,options:{data:{username}}});
+  if(error){showAlert(error.message,'error');btn.disabled=false;btn.textContent='Creer mon compte';}
+  else{showAlert('Compte cree ! Verifie ton email puis connecte-toi.','success');btn.disabled=false;btn.textContent='Creer mon compte';}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('loginPanel').classList.contains('active'))doLogin();else doSignup();}});
+db.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='index.html';});
+</script>
+</body>
+</html>

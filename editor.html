@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ArticlePress - Editeur</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL="https://tophvdcznopyqwzzzghi.supabase.co";
+const SUPA_KEY="sb_publishable_2i-R1PGEdnbtnxEJL8p5Sw_IJXUypOr";
+const db=supabase.createClient(SUPA_URL,SUPA_KEY);
+</script>
+
+<style>
+
+:root{
+  --dark:#1a1a1a;
+  --mid:#4a4a4a;
+  --light:#888;
+  --cream:#f5f3f0;
+  --white:#ffffff;
+  --accent:#c8a96e;
+  --border:#e8e6e3;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Crimson Text',serif;background:var(--cream);color:var(--dark);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+body{min-height:100vh;background:var(--cream)}
+nav{background:var(--dark);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.logo{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:#fff;letter-spacing:1px}
+.logo span{color:var(--accent)}
+.nav-links a{color:rgba(255,255,255,0.75);font-size:0.95rem;margin-left:28px;transition:color 0.2s}
+.nav-links a:hover{color:#fff}
+.btn-nav{background:var(--accent);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-family:'Libre Baskerville',serif;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-left:20px;transition:all 0.2s}
+.btn-nav:hover{background:#b8933e;transform:translateY(-1px)}
+#authWall{display:none;text-align:center;padding:100px 20px}
+#authWall h2{font-family:'Libre Baskerville',serif;font-size:1.8rem;margin-bottom:16px}
+#authWall p{color:var(--light);margin-bottom:30px;font-size:1.1rem}
+.btn-big{display:inline-block;background:var(--dark);color:#fff;padding:14px 36px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.95rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;transition:all 0.2s}
+.btn-big:hover{background:var(--mid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+#editorMain{max-width:1100px;margin:0 auto;padding:40px}
+.editor-toolbar{display:flex;gap:12px;justify-content:flex-end;margin-bottom:20px;flex-wrap:wrap}
+.btn-tool{padding:10px 24px;border-radius:6px;font-family:'Libre Baskerville',serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:all 0.2s;border:none}
+.btn-save{background:#e8e6e3;color:var(--dark)}
+.btn-save:hover{background:#d0ccc7}
+.btn-publish{background:var(--dark);color:#fff}
+.btn-publish:hover{background:var(--mid);transform:translateY(-1px);box-shadow:0 5px 18px rgba(0,0,0,0.15)}
+.btn-pdf{background:#2c5f2d;color:#fff}
+.btn-pdf:hover{background:#1e4620}
+.btn-tool:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.article-container{background:#fff;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.08);overflow:hidden}
+.article-header{background:linear-gradient(135deg,#4a4a4a 0%,#2c2c2c 100%);padding:20px 30px}
+.date-input{font-family:'Libre Baskerville',serif;font-size:1.1rem;letter-spacing:2px;text-transform:uppercase;background:transparent;border:2px solid transparent;color:#fff;padding:8px 15px;border-radius:6px;min-width:280px;transition:all 0.3s}
+.date-input:focus{outline:none;border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.1)}
+.article-body{display:flex;gap:0;padding:40px;gap:40px}
+.sidebar{flex:0 0 240px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.profile-upload{position:relative;width:170px;height:170px;border-radius:50%;overflow:hidden;cursor:pointer;border:4px solid var(--border);transition:all 0.3s}
+.profile-upload:hover{border-color:var(--dark);transform:scale(1.04)}
+.profile-upload img{width:100%;height:100%;object-fit:cover}
+.upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;color:#fff;font-size:0.85rem;text-align:center;padding:16px}
+.profile-upload:hover .upload-overlay{opacity:1}
+.author-info{text-align:center;width:100%}
+.author-input{width:100%;border:2px solid var(--border);padding:10px 12px;font-family:'Libre Baskerville',serif;font-weight:700;font-size:1rem;text-align:center;border-radius:6px;color:var(--dark);background:transparent;transition:border-color 0.2s;margin-bottom:8px}
+.author-input:focus{outline:none;border-color:var(--dark)}
+.role-input{width:100%;border:2px solid var(--border);padding:9px 12px;font-family:'Crimson Text',serif;font-size:0.9rem;text-align:center;border-radius:6px;color:var(--mid);background:transparent;transition:border-color 0.2s}
+.role-input:focus{outline:none;border-color:var(--dark)}
+.main-content{flex:1}
+.article-textarea{width:100%;border:2px solid var(--border);padding:20px;font-family:'Crimson Text',serif;font-size:1.1rem;line-height:1.85;border-radius:6px;resize:none;overflow:hidden;transition:border-color 0.2s;color:var(--dark);background:transparent;min-height:300px}
+.article-textarea:focus{outline:none;border-color:var(--dark)}
+.status-bar{background:#f0ede9;padding:12px 40px;display:flex;align-items:center;gap:16px;font-size:0.9rem;color:var(--light)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#aaa}
+.status-dot.saved{background:#27ae60}
+.status-dot.saving{background:var(--accent);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.toast{position:fixed;bottom:30px;right:30px;background:var(--dark);color:#fff;padding:14px 24px;border-radius:8px;font-family:'Libre Baskerville',serif;font-size:0.85rem;font-weight:700;transform:translateY(100px);opacity:0;transition:all 0.3s;z-index:1000}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#27ae60}
+.toast.error{background:#c0392b}
+@page{margin:0}
+@media print{
+  nav,.editor-toolbar,.status-bar,.upload-overlay{display:none!important}
+  body{background:#fff;padding:0}
+  .article-container{box-shadow:none;border-radius:0}
+  .article-body{display:flex!important;flex-direction:row!important}
+  .sidebar{flex:0 0 220px!important}
+  .article-textarea{border-color:transparent!important}
+  .author-input,.role-input{border-color:transparent!important}
+  .date-input{display:block!important}
+  .article-header{background:#4a4a4a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="logo">Article<span>Press</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Accueil</a>
+    <a href="#" id="navProfile" style="display:none"></a>
+    <a href="auth.html" id="navLogin">Connexion</a>
+    <button class="btn-nav" id="navLogout" style="display:none" onclick="logout()">Deconnexion</button>
+  </div>
+</nav>
+
+<div id="authWall">
+  <h2>Connexion requise</h2>
+  <p>Connecte-toi pour ecrire et publier des articles.</p>
+  <a href="auth.html" class="btn-big">Se connecter</a>
+</div>
+
+<div id="editorMain" style="display:none">
+  <div class="editor-toolbar">
+    <button class="btn-tool btn-save" onclick="saveDraft()">Sauvegarder</button>
+    <button class="btn-tool btn-pdf" onclick="downloadPDF()">Telecharger PDF</button>
+    <button class="btn-tool btn-publish" id="publishBtn" onclick="publishArticle()">Publier</button>
+  </div>
+
+  <div class="article-container">
+    <div class="article-header">
+      <input type="text" class="date-input" id="dateInput" value="MARCH 3, 2026">
+    </div>
+    <div class="article-body">
+      <div class="sidebar">
+        <div class="profile-upload" id="profileUpload" onclick="document.getElementById('imgInput').click()">
+          <img id="profileImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Crect fill='%23e8e6e3' width='170' height='170'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23999'%3ECliquez pour%0Aajouter photo%3C/text%3E%3C/svg%3E">
+          <div class="upload-overlay">Changer la photo</div>
+          <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="loadImage(this)">
+        </div>
+        <div class="author-info">
+          <input type="text" class="author-input" id="authorName" placeholder="Votre Nom" value="">
+          <input type="text" class="role-input" id="authorTitle" placeholder="Votre Fonction" value="">
+        </div>
+      </div>
+      <div class="main-content">
+        <textarea class="article-textarea" id="articleText" placeholder="Ecrivez votre article ici..." oninput="autoResize(this)"></textarea>
+      </div>
+    </div>
+    <div class="status-bar">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Pret a ecrire</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+async function initNav(){
+  const{data:{session}}=await db.auth.getSession();
+  if(session){
+    document.getElementById('navLogin').style.display='none';
+    document.getElementById('navWrite').style.display='inline';
+    document.getElementById('navLogout').style.display='inline';
+    const{data:profile}=await db.from('profiles').select('username').eq('id',session.user.id).single();
+    if(profile){
+      const a=document.getElementById('navProfile');
+      a.href='profile.html?user='+profile.username;
+      a.style.display='inline';
+      a.textContent=profile.username;
+    }
+  }
+}
+async function logout(){
+  await db.auth.signOut();
+  window.location.href='index.html';
+}
+initNav();
+
+let currentUser=null;
+let imageData=null;
+let publishedId=null;
+
+async function init(){
+  const{data:{session}}=await db.auth.getSession();
+  if(!session){
+    document.getElementById('authWall').style.display='block';
+    return;
+  }
+  currentUser=session.user;
+  document.getElementById('editorMain').style.display='block';
+  const{data:profile}=await db.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(profile){
+    document.getElementById('authorName').value=profile.username||'';
+    if(profile.avatar_url){document.getElementById('profileImg').src=profile.avatar_url;imageData=profile.avatar_url;}
+  }
+  const today=new Date();
+  const months=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+  document.getElementById('dateInput').value=months[today.getMonth()]+' '+today.getDate()+', '+today.getFullYear();
+  autoResize(document.getElementById('articleText'));
+}
+
+function loadImage(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{imageData=e.target.result;document.getElementById('profileImg').src=imageData;};
+  reader.readAsDataURL(file);
+}
+
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+
+function setStatus(text,type){
+  document.getElementById('statusText').textContent=text;
+  const dot=document.getElementById('statusDot');
+  dot.className='status-dot'+(type?' '+type:'');
+}
+
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+type;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+function saveDraft(){
+  localStorage.setItem('ap_draft',JSON.stringify({
+    date:document.getElementById('dateInput').value,
+    author:document.getElementById('authorName').value,
+    role:document.getElementById('authorTitle').value,
+    content:document.getElementById('articleText').value,
+    image:imageData
+  }));
+  setStatus('Brouillon sauvegarde localement','saved');
+  showToast('Brouillon sauvegarde !','success');
+}
+
+async function publishArticle(){
+  if(!currentUser)return;
+  const content=document.getElementById('articleText').value.trim();
+  if(!content)return showToast('Ecris quelque chose avant de publier.','error');
+  const btn=document.getElementById('publishBtn');
+  btn.disabled=true;btn.textContent='Publication...';
+  setStatus('Publication en cours...','saving');
+  const article={
+    user_id:currentUser.id,
+    author_name:document.getElementById('authorName').value||'Auteur',
+    author_title:document.getElementById('authorTitle').value||'',
+    date_display:document.getElementById('dateInput').value,
+    content,
+    image_data:imageData||null
+  };
+  let result;
+  if(publishedId){
+    result=await db.from('articles').update(article).eq('id',publishedId).eq('user_id',currentUser.id);
+  } else {
+    result=await db.from('articles').insert([article]).select().single();
+    if(result.data)publishedId=result.data.id;
+  }
+  if(result.error){
+    showToast('Erreur: '+result.error.message,'error');
+    setStatus('Erreur de publication','');
+  } else {
+    setStatus('Publie avec succes','saved');
+    showToast('Article publie !','success');
+    btn.textContent='Mettre a jour';
+  }
+  btn.disabled=false;
+}
+
+function downloadPDF(){window.print();}
+
+const draft=JSON.parse(localStorage.getItem('ap_draft')||'null');
+if(draft){
+  setTimeout(()=>{
+    if(confirm('Reprendre le brouillon non sauvegarde ?')){
+      if(draft.date)document.getElementById('dateInput').value=draft.date;
+      if(draft.author)document.getElementById('authorName').value=draft.author;
+      if(draft.role)document.getElementById('authorTitle').value=draft.role;
+      if(draft.content){document.getElementById('articleText').value=draft.content;autoResize(document.getElementById('articleText'));}
+      if(draft.image){imageData=draft.image;document.getElementById('profileImg').src=draft.image;}
+    }
+  },500);
+}
+
+init();
+</script>
+</body>
+</html>
