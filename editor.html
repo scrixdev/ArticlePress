@@ -502,13 +502,147 @@ nav{
 /* ══════════════════════════════
    PRINT
 ══════════════════════════════ */
-@page{margin:0}
+@page{
+  margin:0;
+  size:A4;
+}
 @media print{
-  nav,.status-bar,.upload-overlay,.btn-save-photo,.cmodal-bg{display:none!important}
-  body{background:#fff}
-  .article-container{box-shadow:none;border:none;border-radius:0}
-  .article-textarea,.author-input,.role-input{border-color:transparent!important;box-shadow:none!important}
-  .article-header{background:#1a1a1a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  /* Hide UI elements */
+  nav,.status-bar,.upload-overlay,.btn-save-photo,.cmodal-bg,
+  .sidebar-tag,.sidebar-top-rule,.sidebar-rule{display:none!important}
+
+  /* Reset body */
+  html,body{height:auto!important;background:#fff!important}
+
+  /* Editor fills page */
+  #editorMain{
+    display:flex!important;
+    flex-direction:column!important;
+    padding:0!important;
+    height:auto!important;
+    min-height:100vh;
+  }
+
+  .article-container{
+    box-shadow:none!important;
+    border:none!important;
+    border-radius:0!important;
+    flex:1;
+    page-break-inside:avoid;
+  }
+
+  /* Dark header preserved */
+  .article-header{
+    background:#111111!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    padding:22px 40px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+  }
+  .date-input{
+    color:#ffffff!important;
+    border-color:transparent!important;
+    background:transparent!important;
+    font-size:0.9rem!important;
+    letter-spacing:3px!important;
+  }
+  .header-ornament{
+    color:#c8a96e!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* Article body layout */
+  .article-body{
+    display:flex!important;
+    flex-direction:row!important;
+    flex:1;
+    min-height:80vh;
+  }
+
+  /* Sidebar */
+  .sidebar{
+    display:flex!important;
+    flex:0 0 220px!important;
+    border-right:1px solid #e0ddd8!important;
+    background:#f5f3f0!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    padding:32px 20px!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+  }
+
+  /* Avatar */
+  .profile-upload{
+    border:2px solid #ddd!important;
+    box-shadow:none!important;
+    width:130px!important;
+    height:130px!important;
+    transform:none!important;
+  }
+  .profile-upload img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+  }
+
+  /* Name & role inputs */
+  .author-input{
+    border:none!important;
+    border-bottom:1.5px solid #ddd!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    font-size:1rem!important;
+    font-weight:700!important;
+    text-align:center!important;
+    padding:6px 0!important;
+    color:#111!important;
+    width:100%!important;
+  }
+  .role-input{
+    border:none!important;
+    border-bottom:1px solid #e8e8e8!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    font-size:0.92rem!important;
+    font-style:italic!important;
+    text-align:center!important;
+    padding:5px 0!important;
+    color:#666!important;
+    width:100%!important;
+  }
+
+  /* Writing area */
+  .main-content{
+    flex:1!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+  .article-textarea{
+    border:none!important;
+    box-shadow:none!important;
+    background:#fff!important;
+    padding:40px 48px!important;
+    font-size:1.1rem!important;
+    line-height:1.9!important;
+    color:#111!important;
+    min-height:0!important;
+    height:auto!important;
+    white-space:pre-wrap!important;
+    word-wrap:break-word!important;
+    flex:1!important;
+  }
+
+  /* Prevent unwanted page breaks */
+  .article-container,.article-body,.main-content{
+    page-break-inside:avoid;
+  }
 }
 
 /* ══════════════════════════════
