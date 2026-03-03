@@ -106,16 +106,47 @@ async function doLogin(){
   else{showAlert('Connecte!','success');setTimeout(()=>window.location.href='index.html',800);}
 }
 async function doSignup(){
-  const username=document.getElementById('signupUsername').value.trim();
-  const email=document.getElementById('signupEmail').value.trim();
-  const pass=document.getElementById('signupPassword').value;
-  if(!username||!email||!pass)return showAlert('Remplis tous les champs.','error');
-  if(pass.length<6)return showAlert('Mot de passe trop court (min. 6).','error');
-  const btn=document.getElementById('signupBtn');
-  btn.disabled=true;btn.textContent='Creation...';
-  const{error}=await db.auth.signUp({email,password:pass,options:{data:{username}}});
-  if(error){showAlert(error.message,'error');btn.disabled=false;btn.textContent='Creer mon compte';}
-  else{showAlert('Compte cree ! Verifie ton email puis connecte-toi.','success');btn.disabled=false;btn.textContent='Creer mon compte';}
+  const username = document.getElementById('signupUsername').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const pass = document.getElementById('signupPassword').value;
+  if(!username || !email || !pass) return showAlert('Remplis tous les champs.', 'error');
+  if(pass.length < 6) return showAlert('Mot de passe trop court (min. 6).', 'error');
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true;
+  btn.textContent = 'Vérification...';
+  // Vérifie si le username existe déjà
+  const { data: existing, error: checkError } = await db
+    .from('profiles')
+    .select('username')
+    .eq('username', username)
+    .maybeSingle();
+  if(checkError){
+    showAlert('Erreur lors de la vérification du nom.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+    return;
+  }
+  if(existing){
+    showAlert('Ce nom d\'utilisateur est déjà pris. Choisis-en un autre.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+    return;
+  }
+  // Username libre → on crée le compte
+  btn.textContent = 'Création...';
+  const { error } = await db.auth.signUp({
+    email, password: pass,
+    options: { data: { username } }
+  });
+  if(error){
+    showAlert(error.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+  } else {
+    showAlert('Compte créé ! Vérifie ton email puis connecte-toi.', 'success');
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+  }
 }
 document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(document.getElementById('loginPanel').classList.contains('active'))doLogin();else doSignup();}});
 db.auth.getSession().then(({data:{session}})=>{if(session)window.location.href='index.html';});
