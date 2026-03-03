@@ -509,7 +509,8 @@ nav{
 @media print{
   /* Hide UI elements */
   nav,.status-bar,.upload-overlay,.btn-save-photo,.cmodal-bg,
-  .sidebar-tag,.sidebar-top-rule,.sidebar-rule{display:none!important}
+  .sidebar-tag,.sidebar-top-rule,.sidebar-rule,#btnSavePhoto{display:none!important}
+  .sidebar > *{margin-top:0!important}
 
   /* Reset body */
   html,body{height:auto!important;background:#fff!important}
@@ -570,19 +571,24 @@ nav{
     background:#f5f3f0!important;
     -webkit-print-color-adjust:exact;
     print-color-adjust:exact;
-    padding:32px 20px!important;
+    padding:32px 20px 32px!important;
     align-items:center!important;
     justify-content:flex-start!important;
     gap:14px!important;
+    flex-direction:column!important;
+    overflow:visible!important;
+    height:auto!important;
   }
 
   /* Avatar */
   .profile-upload{
     border:2px solid #ddd!important;
     box-shadow:none!important;
-    width:130px!important;
-    height:130px!important;
+    width:140px!important;
+    height:140px!important;
     transform:none!important;
+    flex-shrink:0!important;
+    margin-bottom:4px!important;
   }
   .profile-upload img{
     width:100%!important;
