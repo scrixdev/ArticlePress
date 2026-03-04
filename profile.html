@@ -258,6 +258,36 @@ footer span{color:var(--accent)}
   cursor:pointer;transition:all 0.22s;
 }
 .btn-edit-article:hover{background:var(--dark);color:#fff;border-color:var(--dark);transform:translateY(-1px)}
+
+/* ══ ARTICLE READ MODAL ══ */
+.read-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)}
+.read-overlay.open{display:flex}
+.read-modal{background:var(--cream);border-radius:6px;max-width:900px;width:100%;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 40px 100px rgba(0,0,0,0.45);animation:fadeUp 0.42s cubic-bezier(.22,.68,0,1.2) both}
+.read-modal-close{position:absolute;top:50%;right:18px;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);width:32px;height:32px;border-radius:50%;cursor:pointer;color:#fff;z-index:10;transition:all 0.22s;display:flex;align-items:center;justify-content:center}
+.read-modal-close:hover{background:rgba(255,255,255,0.22);transform:translateY(-50%) scale(1.08)}
+.read-modal-header{background:var(--dark);padding:20px 60px 20px 40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;position:relative}
+.read-modal-date{font-family:'Libre Baskerville',serif;font-size:0.88rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7)}
+.read-modal-ornament{font-family:'Libre Baskerville',serif;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);opacity:0.7}
+.read-modal-body{display:flex;flex:1;overflow:hidden}
+.read-modal-sidebar{flex:0 0 220px;display:flex;flex-direction:column;align-items:center;gap:16px;padding:36px 24px 28px;border-right:1.5px solid var(--border);background:#f2f0ec;overflow-y:auto;text-align:center}
+.read-sidebar-rule{width:40px;height:2px;background:var(--accent);border-radius:2px;opacity:0.6;margin-bottom:4px}
+.read-avatar-wrap{width:130px;height:130px;border-radius:50%;border:3px solid var(--border);overflow:hidden;flex-shrink:0;box-shadow:0 6px 24px rgba(0,0,0,0.12)}
+.read-avatar-wrap img{width:100%;height:100%;object-fit:cover}
+.read-avatar-ph{width:100%;height:100%;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:2.2rem;color:#fff}
+.read-author{font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;color:var(--dark);border:2px solid var(--border);border-radius:5px;padding:9px 12px;width:100%;background:#fff}
+.read-role{font-family:'Crimson Text',serif;font-size:0.95rem;font-style:italic;color:var(--mid);border:2px solid var(--border);border-radius:5px;padding:8px 12px;width:100%;background:#fff;min-height:2.4em}
+.read-profile-link{display:inline-flex;align-items:center;gap:6px;margin-top:auto;font-family:'Libre Baskerville',serif;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);transition:all 0.2s}
+.read-profile-link:hover{color:var(--accent-dark);gap:10px}
+.read-content-wrap{flex:1;overflow-y:auto;padding:44px 52px}
+.read-content{font-family:'Crimson Text',serif;font-size:1.18rem;line-height:2;color:var(--dark)}
+.read-content p{margin-bottom:0.8em}
+.read-content h1{font-family:'Libre Baskerville',serif;font-size:2rem;font-weight:700;line-height:1.25;margin:1.2em 0 0.5em}
+.read-content h2{font-family:'Libre Baskerville',serif;font-size:1.55rem;font-weight:700;margin:1.1em 0 0.4em}
+.read-content h3{font-family:'Libre Baskerville',serif;font-size:1.25rem;font-weight:700;margin:1em 0 0.4em}
+.read-content blockquote{border-left:4px solid var(--accent);padding:12px 24px;margin:1.4em 0;background:rgba(200,169,110,0.06);border-radius:0 8px 8px 0;color:var(--mid);font-style:italic}
+.read-content img{max-width:100%;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.1);margin:1em 0}
+.read-content a{color:var(--accent);text-decoration:underline}
+.read-content hr{border:none;border-top:2px solid var(--border);margin:2em 0}
 </style>
 </head>
 <body>
@@ -318,6 +348,37 @@ footer span{color:var(--accent)}
   <div class="articles-list" id="articlesList"><div class="loader">Chargement&#8230;</div></div>
 </div>
 
+
+<!-- ══ ARTICLE READ MODAL ══ -->
+<div class="read-overlay" id="readOverlay" onclick="if(event.target===this)closeReadModal()">
+  <div class="read-modal">
+    <button class="read-modal-close" onclick="closeReadModal()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="read-modal-header">
+      <div class="read-modal-date" id="readDate"></div>
+      <span class="read-modal-ornament">ArticlePress &nbsp;&#9733;&nbsp; Article</span>
+    </div>
+    <div class="read-modal-body">
+      <div class="read-modal-sidebar">
+        <div class="read-sidebar-rule"></div>
+        <div class="read-avatar-wrap">
+          <img id="readAvatarImg" src="" alt="" style="display:none">
+          <div class="read-avatar-ph" id="readAvatarPh">?</div>
+        </div>
+        <div class="read-author" id="readAuthor"></div>
+        <div class="read-role" id="readRole"></div>
+        <a href="#" class="read-profile-link" id="readProfileLink">
+          Voir le profil
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <div class="read-content-wrap">
+        <div class="read-content" id="readContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <footer><p><span>ArticlePress</span> &mdash; Plateforme &#233;ditoriale &mdash; 2026</p></footer>
 
 <!-- ══ DELETE ARTICLE MODAL ══ -->
@@ -435,7 +496,9 @@ async function quickBannerChange(input){
 
 async function loadArticlesPublic(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,false);}
 async function loadArticlesOwn(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,true);}
+let _articlesCache=[];
 function renderArticles(articles,own){
+  _articlesCache=articles||[];
   const count=articles?articles.length:0;
   document.getElementById('articleCount').textContent=count;
   document.getElementById('articleCountLabel').textContent=count+' article'+(count>1?'s':'');
@@ -446,7 +509,7 @@ function renderArticles(articles,own){
     const imgHtml = a.image_data
       ? `<img src="${a.image_data}" alt=""><div class="card-img-overlay"></div>`
       : `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.25"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
-    return `<div class="article-card" style="animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) ${i*0.07}s both">
+    return `<div class="article-card" style="animation:fadeUp 0.45s cubic-bezier(.22,.68,0,1.2) ${i*0.07}s both" onclick="openArticleRead(_articlesCache[${i}])">
       <div class="card-img">${imgHtml}</div>
       <div class="card-body">
         <div class="card-date">${a.date_display||new Date(a.created_at).toLocaleDateString('fr-FR')}</div>
@@ -498,6 +561,29 @@ async function saveProfile(){
   if(error)showToast('Erreur: '+error.message,'error');
   else{showToast('Profil mis à jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
 }
+
+function openArticleRead(a){
+  document.getElementById('readDate').textContent=a.date_display||'';
+  document.getElementById('readAuthor').textContent=a.author_name||'';
+  document.getElementById('readRole').textContent=a.author_title||'';
+  // Content — prefer rich HTML
+  const content=document.getElementById('readContent');
+  if(a.content_html) content.innerHTML=a.content_html;
+  else{content.innerHTML='';const p=document.createElement('p');p.textContent=a.content||'';content.appendChild(p);}
+  // Avatar
+  const img=document.getElementById('readAvatarImg');
+  const ph=document.getElementById('readAvatarPh');
+  if(a.image_data){img.src=a.image_data;img.style.display='block';ph.style.display='none';}
+  else{img.style.display='none';ph.style.display='flex';ph.textContent=(a.author_name||'?')[0].toUpperCase();}
+  document.getElementById('readProfileLink').href='profile.html?user='+encodeURIComponent(a.author_name||'');
+  document.getElementById('readOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeReadModal(){
+  document.getElementById('readOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 function openModal(id){document.getElementById(id).classList.add('open')}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function showToast(msg,type){
