@@ -98,23 +98,25 @@ nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:c
 
 /* Close button */
 .modal-close{
-  position:absolute;top:16px;right:18px;
+  position:absolute;top:50%;right:18px;transform:translateY(-50%);
   background:rgba(255,255,255,0.1);
   border:1px solid rgba(255,255,255,0.15);
-  width:34px;height:34px;border-radius:50%;
+  width:32px;height:32px;border-radius:50%;
   cursor:pointer;color:#fff;z-index:10;
   transition:all 0.22s;
   display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
 }
-.modal-close:hover{background:rgba(255,255,255,0.22);transform:scale(1.1)}
+.modal-close:hover{background:rgba(255,255,255,0.22);transform:translateY(-50%) scale(1.08)}
 
 /* Header — dark like editor */
 .modal-header{
   background:var(--dark);
-  padding:20px 40px;
+  padding:20px 60px 20px 40px;
   flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:none;
+  position:relative;
 }
 .modal-date{
   font-family:'Libre Baskerville',serif;
