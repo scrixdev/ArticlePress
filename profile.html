@@ -495,8 +495,8 @@ async function quickBannerChange(input){
   reader.readAsDataURL(file);
 }
 
-async function loadArticlesPublic(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,false);}
-async function loadArticlesOwn(userId){const{data:a}=await db.from('articles').select('*').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,true);}
+async function loadArticlesPublic(userId){const{data:a}=await db.from('articles').select('*, profiles(username,avatar_url)').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,false);}
+async function loadArticlesOwn(userId){const{data:a}=await db.from('articles').select('*, profiles(username,avatar_url)').eq('user_id',userId).order('created_at',{ascending:false});renderArticles(a,true);}
 let _articlesCache=[];
 function renderArticles(articles,own){
   _articlesCache=articles||[];
@@ -574,7 +574,8 @@ function openArticleRead(a){
   // Avatar
   const img=document.getElementById('readAvatarImg');
   const ph=document.getElementById('readAvatarPh');
-  if(a.image_data){img.src=a.image_data;img.style.display='block';ph.style.display='none';}
+  const readAvSrc=(a.profiles&&a.profiles.avatar_url)||a.image_data||null;
+  if(readAvSrc){img.src=readAvSrc;img.style.display='block';ph.style.display='none';}
   else{img.style.display='none';ph.style.display='flex';ph.textContent=(a.author_name||'?')[0].toUpperCase();}
   document.getElementById('readProfileLink').href='profile.html?user='+encodeURIComponent(a.author_name||'');
   document.getElementById('readOverlay').classList.add('open');
