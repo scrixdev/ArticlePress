@@ -116,89 +116,79 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
 .article-editor code{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:monospace;font-size:0.9em}
 .article-editor pre{background:#1a1a1a;color:#e8e6e3;border-radius:8px;padding:20px 24px;margin:1.2em 0;overflow-x:auto;font-family:monospace;font-size:0.9rem;line-height:1.6}
 
-/* IMAGE BLOCKS */
 /* ══ IMAGE BLOCKS ══ */
-/* Wrapper: inline-block so text can flow beside it */
-.editor-img-wrap{
-  display:inline-block;
-  vertical-align:top;
-  position:relative;
-  margin:0.8em 12px;
-  cursor:default;
-  max-width:100%;
-}
-/* When centered: block + auto margin */
-.editor-img-wrap.align-center{
-  display:block;
-  margin:1.5em auto;
-  text-align:center;
-}
-.editor-img-wrap.align-left{
-  float:left;
-  margin:0.5em 20px 0.8em 0;
-  text-align:left;
-}
-.editor-img-wrap.align-right{
-  float:right;
-  margin:0.5em 0 0.8em 20px;
-  text-align:right;
-}
-.editor-img-wrap img{
+/* Each image lives in a non-editable atomic block */
+.img-block{
   display:block;
   width:100%;
-  height:auto;
-  border-radius:6px;
-  box-shadow:0 4px 24px rgba(0,0,0,0.1);
-  transition:box-shadow 0.22s, outline 0.15s;
+  margin:1.4em 0;
+  clear:both;
+  position:relative;
 }
-.editor-img-wrap.selected img{
+/* Size variants — set on img-block */
+.img-block.size-100{width:100%}
+.img-block.size-65{width:65%}
+.img-block.size-40{width:40%}
+/* Alignment */
+.img-block.align-center{margin-left:auto;margin-right:auto;float:none}
+.img-block.align-left{float:left;margin-right:24px;margin-left:0}
+.img-block.align-right{float:right;margin-left:24px;margin-right:0}
+/* Image itself */
+.img-block img{
+  display:block;width:100%;height:auto;
+  border-radius:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.1);
+  transition:outline 0.15s,box-shadow 0.2s;
+  pointer-events:none;
+}
+.img-block.selected img{
   outline:2.5px solid var(--accent);
-  box-shadow:0 4px 24px rgba(200,169,110,0.3);
+  box-shadow:0 6px 28px rgba(200,169,110,0.3);
 }
-/* Toolbar — always on top, centered above image */
+/* Toolbar — floats above on select */
 .img-toolbar{
   position:absolute;
-  top:-44px;
-  left:50%;
+  top:-46px;left:50%;
   transform:translateX(-50%);
-  background:var(--dark);
-  border-radius:9px;
+  background:#1a1a1a;
+  border-radius:10px;
   padding:6px 10px;
   display:none;
-  align-items:center;
-  gap:3px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.35);
+  align-items:center;gap:4px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.4);
   white-space:nowrap;
-  z-index:50;
+  z-index:100;
+  border:1px solid rgba(255,255,255,0.08);
 }
-.editor-img-wrap.selected .img-toolbar{display:flex}
+.img-block.selected .img-toolbar{display:flex}
 .img-tb-btn{
-  min-width:32px;height:28px;padding:0 7px;
-  border-radius:5px;border:none;background:transparent;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,0.65);
+  height:28px;padding:0 9px;
+  border-radius:6px;border:none;
+  background:transparent;cursor:pointer;
+  color:rgba(255,255,255,0.6);
+  font-size:0.68rem;font-family:'Libre Baskerville',serif;font-weight:700;
+  letter-spacing:0.5px;
   transition:all 0.15s;
-  font-size:0.68rem;font-family:'Libre Baskerville',serif;font-weight:700;letter-spacing:0.5px;
+  display:flex;align-items:center;
 }
-.img-tb-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+.img-tb-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
 .img-tb-btn.active{background:var(--accent);color:#fff}
-.img-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 3px}
-/* Caption */
+.img-tb-sep{width:1px;height:16px;background:rgba(255,255,255,0.12);margin:0 3px}
+/* Caption — always below image, same width */
 .img-caption{
-  display:block;
-  font-style:normal!important;
-  margin-top:6px;
+  display:block;width:100%;
+  margin-top:7px;
   font-family:'Libre Baskerville',serif;
   font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;
   color:var(--light);text-align:center;
   border:none;border-bottom:1.5px solid transparent;
   outline:none;background:transparent;
   padding:3px 0;transition:border-color 0.2s;
-  width:100%;
+  font-style:normal!important;
 }
-.img-caption:empty::before{content:'L\00e9gende\2026';color:#ddd;font-style:normal}
+.img-caption:empty::before{content:'Légende…';color:#ccc}
 .img-caption:focus{border-bottom-color:var(--accent)!important;color:var(--mid)}
-/* Clearfix after floated images */
+/* Clearfix */
 .article-editor::after{content:'';display:table;clear:both}
 
 /* STATUS BAR */
@@ -539,91 +529,105 @@ function confirmLink(){
 }
 
 function reattachImgEvents(container){
-  container.querySelectorAll('.editor-img-wrap').forEach(wrap=>{
-    wrap.addEventListener('click',e=>{
-      if(e.target.closest('.img-toolbar')||e.target.classList.contains('img-caption'))return;
-      document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));
-      wrap.classList.add('selected');e.stopPropagation();
-    });
+  container.querySelectorAll('.img-block').forEach(attachImgEvents);
+}
+function attachImgEvents(block){
+  block.addEventListener('mousedown',e=>{
+    if(e.target.classList.contains('img-caption')) return;
+    if(e.target.closest('.img-toolbar')) return;
+    e.preventDefault();
+    deselectAllImgs();
+    block.classList.add('selected');
   });
 }
-function makeImgWrap(src){
-  const wrap=document.createElement('span');
-  wrap.className='editor-img-wrap align-center';
-  wrap.contentEditable='false';
-  wrap.style.width='100%';
-  wrap.innerHTML=`
+function deselectAllImgs(){
+  document.querySelectorAll('.img-block').forEach(b=>b.classList.remove('selected'));
+}
+document.addEventListener('mousedown',e=>{
+  if(!e.target.closest('.img-block')) deselectAllImgs();
+});
+
+function makeImgBlock(src){
+  const block=document.createElement('div');
+  block.className='img-block align-center size-100';
+  block.contentEditable='false';
+  block.innerHTML=`
     <div class="img-toolbar">
-      <button class="img-tb-btn active" onclick="setImgAlign(this,'center')">Centre</button>
-      <button class="img-tb-btn" onclick="setImgAlign(this,'left')">Gauche</button>
-      <button class="img-tb-btn" onclick="setImgAlign(this,'right')">Droite</button>
-      <div class="img-sep"></div>
-      <button class="img-tb-btn active" onclick="setImgSize(this,'100%')">100%</button>
-      <button class="img-tb-btn" onclick="setImgSize(this,'65%')">65%</button>
-      <button class="img-tb-btn" onclick="setImgSize(this,'40%')">40%</button>
-      <div class="img-sep"></div>
-      <button class="img-tb-btn" onclick="removeImg(this)" style="color:#e05555">&#10005;</button>
+      <button class="img-tb-btn active" onclick="setAlign(this,'center')" title="Centrer">Centre</button>
+      <button class="img-tb-btn" onclick="setAlign(this,'left')" title="Gauche">Gauche</button>
+      <button class="img-tb-btn" onclick="setAlign(this,'right')" title="Droite">Droite</button>
+      <div class="img-tb-sep"></div>
+      <button class="img-tb-btn active" onclick="setSize(this,'100')">100%</button>
+      <button class="img-tb-btn" onclick="setSize(this,'65')">65%</button>
+      <button class="img-tb-btn" onclick="setSize(this,'40')">40%</button>
+      <div class="img-tb-sep"></div>
+      <button class="img-tb-btn" onclick="removeImg(this)" style="color:#e05555">✕</button>
     </div>
-    <img src="${src}" style="width:100%">
+    <img src="${src}">
     <span class="img-caption" contenteditable="true"></span>`;
-  wrap.addEventListener('click',e=>{
-    if(e.target.closest('.img-toolbar')||e.target.classList.contains('img-caption'))return;
-    document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));
-    wrap.classList.add('selected');e.stopPropagation();
-  });
-  return wrap;
+  attachImgEvents(block);
+  return block;
 }
 
 function insertImage(input){
-  const file=input.files[0];if(!file)return;
+  const file=input.files[0]; if(!file)return;
   const reader=new FileReader();
   reader.onload=e=>{
     const editor=document.getElementById('articleEditor');
-    editor.focus();
-    const wrap=makeImgWrap(e.target.result);
+    const block=makeImgBlock(e.target.result);
+    /* Insert a paragraph before if needed, then the block, then paragraph after */
+    const before=document.createElement('p'); before.innerHTML='<br>';
+    const after=document.createElement('p'); after.innerHTML='<br>';
+    /* Find cursor position */
     const sel=window.getSelection();
+    let refNode=null;
     if(sel&&sel.rangeCount>0){
-      const range=sel.getRangeAt(0);
-      range.collapse(false);
-      range.insertNode(wrap);
-      // Move cursor after image
-      const newRange=document.createRange();
-      newRange.setStartAfter(wrap);
-      newRange.collapse(true);
-      sel.removeAllRanges();sel.addRange(newRange);
-    } else {
-      editor.appendChild(wrap);
+      let n=sel.getRangeAt(0).commonAncestorContainer;
+      while(n&&n.parentNode!==editor) n=n.parentNode;
+      refNode=n;
     }
+    if(refNode&&refNode.parentNode===editor){
+      editor.insertBefore(after, refNode.nextSibling);
+      editor.insertBefore(block, after);
+    } else {
+      editor.appendChild(before);
+      editor.appendChild(block);
+      editor.appendChild(after);
+    }
+    /* Move cursor to paragraph after */
+    const range=document.createRange();
+    range.setStart(after,0); range.collapse(true);
+    sel.removeAllRanges(); sel.addRange(range);
+    editor.focus();
     updateStats();
   };
   reader.readAsDataURL(file);
   input.value='';
 }
 
-function setImgAlign(btn,align){
-  const wrap=btn.closest('.editor-img-wrap');
+function setAlign(btn, align){
+  const block=btn.closest('.img-block');
   btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{
-    if(['Centre','Gauche','Droite'].includes(b.textContent))b.classList.remove('active');
+    if(['Centre','Gauche','Droite'].includes(b.textContent.trim())) b.classList.remove('active');
   });
   btn.classList.add('active');
-  wrap.classList.remove('align-center','align-left','align-right');
-  if(align==='left') wrap.classList.add('align-left');
-  else if(align==='right') wrap.classList.add('align-right');
-  else wrap.classList.add('align-center');
-  // Reset inline width when switching alignment
-  const cur=wrap.querySelector('img');
-  if(cur) wrap.style.width=cur.style.width||'100%';
+  block.classList.remove('align-center','align-left','align-right');
+  block.classList.add('align-'+align);
 }
-function setImgSize(btn,size){
-  const wrap=btn.closest('.editor-img-wrap');
-  const img=wrap.querySelector('img');
-  img.style.width=size;
-  wrap.style.width=size; // constrains the block
-  btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{if(['100%','65%','40%'].includes(b.textContent))b.classList.remove('active');});
+function setSize(btn, size){
+  const block=btn.closest('.img-block');
+  btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{
+    if(['100%','65%','40%'].includes(b.textContent.trim())) b.classList.remove('active');
+  });
   btn.classList.add('active');
+  block.classList.remove('size-100','size-65','size-40');
+  block.classList.add('size-'+size);
 }
-function removeImg(btn){btn.closest('.editor-img-wrap').remove();updateStats();}
-document.addEventListener('click',e=>{if(!e.target.closest('.editor-img-wrap'))document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));});
+function removeImg(btn){
+  const block=btn.closest('.img-block');
+  block.remove();
+  updateStats();
+}
 
 function loadProfileImage(input){
   const file=input.files[0];if(!file)return;
@@ -682,16 +686,8 @@ async function publishArticle(){
   const editor=document.getElementById('articleEditor');
   // Clone editor content and strip toolbar elements before saving
   const clone=editor.cloneNode(true);
-  clone.querySelectorAll('.img-toolbar,.img-resize-handle').forEach(el=>el.remove());
-  // Unwrap img-inner but keep img and caption
-  clone.querySelectorAll('.img-inner').forEach(inner=>{
-    const parent=inner.closest('.editor-img-wrap');
-    if(parent){
-      // Move img and caption out to wrap level
-      inner.querySelectorAll('img,.img-caption').forEach(el=>parent.insertBefore(el,inner));
-      inner.remove();
-    }
-  });
+  clone.querySelectorAll('.img-toolbar').forEach(el=>el.remove());
+  clone.querySelectorAll('.img-block').forEach(b=>b.classList.remove('selected'));
   const contentHtml=clone.innerHTML.trim();
   const contentText=editor.innerText.trim();
   if(!contentText)return showToast('Écris quelque chose avant de publier.','error');
