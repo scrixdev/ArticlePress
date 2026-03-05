@@ -117,21 +117,89 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
 .article-editor pre{background:#1a1a1a;color:#e8e6e3;border-radius:8px;padding:20px 24px;margin:1.2em 0;overflow-x:auto;font-family:monospace;font-size:0.9rem;line-height:1.6}
 
 /* IMAGE BLOCKS */
-.editor-img-wrap{position:relative;display:flex;flex-direction:column;align-items:center;margin:1.5em auto;text-align:center;cursor:default;clear:both;max-width:100%}
-.editor-img-wrap img{max-width:100%;height:auto;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.1);display:inline-block;transition:box-shadow 0.22s}
-.editor-img-wrap.selected img{outline:2.5px solid var(--accent);box-shadow:0 4px 24px rgba(200,169,110,0.3)}
-.img-resize-handle{position:absolute;bottom:-6px;right:-6px;width:14px;height:14px;background:var(--accent);border:2px solid #fff;border-radius:3px;cursor:se-resize;display:none}
-.editor-img-wrap.selected .img-resize-handle{display:block}
-.img-toolbar{position:relative;background:var(--dark);border-radius:8px;padding:6px 10px;display:none;align-items:center;gap:3px;box-shadow:0 4px 20px rgba(0,0,0,0.3);white-space:nowrap;z-index:10;margin-bottom:8px;width:fit-content;margin-left:auto;margin-right:auto}
+/* ══ IMAGE BLOCKS ══ */
+/* Wrapper: inline-block so text can flow beside it */
+.editor-img-wrap{
+  display:inline-block;
+  vertical-align:top;
+  position:relative;
+  margin:0.8em 12px;
+  cursor:default;
+  max-width:100%;
+}
+/* When centered: block + auto margin */
+.editor-img-wrap.align-center{
+  display:block;
+  margin:1.5em auto;
+  text-align:center;
+}
+.editor-img-wrap.align-left{
+  float:left;
+  margin:0.5em 20px 0.8em 0;
+  text-align:left;
+}
+.editor-img-wrap.align-right{
+  float:right;
+  margin:0.5em 0 0.8em 20px;
+  text-align:right;
+}
+.editor-img-wrap img{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:6px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.1);
+  transition:box-shadow 0.22s, outline 0.15s;
+}
+.editor-img-wrap.selected img{
+  outline:2.5px solid var(--accent);
+  box-shadow:0 4px 24px rgba(200,169,110,0.3);
+}
+/* Toolbar — always on top, centered above image */
+.img-toolbar{
+  position:absolute;
+  top:-44px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--dark);
+  border-radius:9px;
+  padding:6px 10px;
+  display:none;
+  align-items:center;
+  gap:3px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.35);
+  white-space:nowrap;
+  z-index:50;
+}
 .editor-img-wrap.selected .img-toolbar{display:flex}
-.editor-img-wrap{display:flex;flex-direction:column;align-items:center}
-.img-tb-btn{min-width:28px;height:28px;padding:0 6px;border-radius:5px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.7);transition:all 0.15s;font-size:0.68rem;font-family:'Libre Baskerville',serif;font-weight:700;letter-spacing:0.5px}
+.img-tb-btn{
+  min-width:32px;height:28px;padding:0 7px;
+  border-radius:5px;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.65);
+  transition:all 0.15s;
+  font-size:0.68rem;font-family:'Libre Baskerville',serif;font-weight:700;letter-spacing:0.5px;
+}
 .img-tb-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
 .img-tb-btn.active{background:var(--accent);color:#fff}
-.img-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 2px}
-.img-caption{display:block;font-style:normal!important;margin-top:6px;font-family:'Libre Baskerville',serif;font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);text-align:center;border:none;border-bottom:1.5px solid transparent;outline:none;background:transparent;padding:4px 0;transition:border-color 0.2s;width:100%;box-sizing:border-box}
-.img-caption:empty::before{content:'Ajouter une l\00e9gende\2026';color:#ccc;font-style:normal}
+.img-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 3px}
+/* Caption */
+.img-caption{
+  display:block;
+  font-style:normal!important;
+  margin-top:6px;
+  font-family:'Libre Baskerville',serif;
+  font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--light);text-align:center;
+  border:none;border-bottom:1.5px solid transparent;
+  outline:none;background:transparent;
+  padding:3px 0;transition:border-color 0.2s;
+  width:100%;
+}
+.img-caption:empty::before{content:'L\00e9gende\2026';color:#ddd;font-style:normal}
 .img-caption:focus{border-bottom-color:var(--accent)!important;color:var(--mid)}
+/* Clearfix after floated images */
+.article-editor::after{content:'';display:table;clear:both}
 
 /* STATUS BAR */
 .status-bar{background:var(--sidebar-bg);padding:10px 40px;display:flex;align-items:center;gap:12px;font-family:'Libre Baskerville',serif;font-size:0.7rem;color:var(--light);letter-spacing:1px;text-transform:uppercase;border-top:1.5px solid var(--border);flex-shrink:0}
@@ -301,7 +369,7 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
           <div class="fmt-sep"></div>
           <div class="fmt-group" style="align-items:center;gap:4px">
             <label title="Couleur du texte" style="position:relative;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;transition:background 0.18s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><path d="M9 3L5 21"/><path d="M19 3l-4 18"/><path d="M5 9h14"/><path d="M3 15h18"/></svg>
+              <span style="font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:currentColor;pointer-events:none;line-height:1">A</span>
               <div id="colorSwatch" style="position:absolute;bottom:3px;left:6px;right:6px;height:3px;background:#0f0f0f;border-radius:2px;pointer-events:none"></div>
               <input type="color" id="textColorPicker" value="#0f0f0f" style="position:absolute;opacity:0;width:100%;height:100%;cursor:pointer" onchange="applyTextColor(this.value)" oninput="document.getElementById('colorSwatch').style.background=this.value" title="Couleur du texte">
             </label>
@@ -409,13 +477,7 @@ async function init(){
       if(article.content_html){
         editor.innerHTML=article.content_html;
         // Re-attach click events to existing image wraps
-        editor.querySelectorAll('.editor-img-wrap').forEach(wrap=>{
-          wrap.addEventListener('click',e=>{
-            if(e.target.closest('.img-toolbar')||e.target.classList.contains('img-caption'))return;
-            document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));
-            wrap.classList.add('selected');e.stopPropagation();
-          });
-        });
+        reattachImgEvents(editor);
       } else if(article.content)editor.innerText=article.content;
       if(article.image_data){document.getElementById('profileImg').src=article.image_data;profileImageData=article.image_data;}
       updateStats();
@@ -476,41 +538,62 @@ function confirmLink(){
   closeLinkModal();
 }
 
-function insertImage(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const src=e.target.result;
-    const editor=document.getElementById('articleEditor');
-    editor.focus();
-    const wrap=document.createElement('div');
-    wrap.className='editor-img-wrap';
-    wrap.contentEditable='false';
-    wrap.innerHTML=`
-      <div class="img-toolbar">
-        <button class="img-tb-btn active" onclick="setImgAlign(this,'center')">Centre</button>
-        <button class="img-tb-btn" onclick="setImgAlign(this,'left')">Gauche</button>
-        <button class="img-tb-btn" onclick="setImgAlign(this,'right')">Droite</button>
-        <div class="img-sep"></div>
-        <button class="img-tb-btn active" onclick="setImgSize(this,'100%')">100%</button>
-        <button class="img-tb-btn" onclick="setImgSize(this,'65%')">65%</button>
-        <button class="img-tb-btn" onclick="setImgSize(this,'40%')">40%</button>
-        <div class="img-sep"></div>
-        <button class="img-tb-btn" onclick="removeImg(this)" style="color:#e05555">&#10005;</button>
-      </div>
-      <div class="img-inner" style="display:flex;flex-direction:column;align-items:center;width:100%">
-        <img src="${src}" style="display:block;width:100%;max-width:100%;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.1)">
-        <span class="img-caption" contenteditable="true"></span>
-      </div>`;
+function reattachImgEvents(container){
+  container.querySelectorAll('.editor-img-wrap').forEach(wrap=>{
     wrap.addEventListener('click',e=>{
       if(e.target.closest('.img-toolbar')||e.target.classList.contains('img-caption'))return;
       document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));
       wrap.classList.add('selected');e.stopPropagation();
     });
+  });
+}
+function makeImgWrap(src){
+  const wrap=document.createElement('span');
+  wrap.className='editor-img-wrap align-center';
+  wrap.contentEditable='false';
+  wrap.style.width='100%';
+  wrap.innerHTML=`
+    <div class="img-toolbar">
+      <button class="img-tb-btn active" onclick="setImgAlign(this,'center')">Centre</button>
+      <button class="img-tb-btn" onclick="setImgAlign(this,'left')">Gauche</button>
+      <button class="img-tb-btn" onclick="setImgAlign(this,'right')">Droite</button>
+      <div class="img-sep"></div>
+      <button class="img-tb-btn active" onclick="setImgSize(this,'100%')">100%</button>
+      <button class="img-tb-btn" onclick="setImgSize(this,'65%')">65%</button>
+      <button class="img-tb-btn" onclick="setImgSize(this,'40%')">40%</button>
+      <div class="img-sep"></div>
+      <button class="img-tb-btn" onclick="removeImg(this)" style="color:#e05555">&#10005;</button>
+    </div>
+    <img src="${src}" style="width:100%">
+    <span class="img-caption" contenteditable="true"></span>`;
+  wrap.addEventListener('click',e=>{
+    if(e.target.closest('.img-toolbar')||e.target.classList.contains('img-caption'))return;
+    document.querySelectorAll('.editor-img-wrap').forEach(w=>w.classList.remove('selected'));
+    wrap.classList.add('selected');e.stopPropagation();
+  });
+  return wrap;
+}
+
+function insertImage(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const editor=document.getElementById('articleEditor');
+    editor.focus();
+    const wrap=makeImgWrap(e.target.result);
     const sel=window.getSelection();
-    if(sel&&sel.rangeCount>0){const range=sel.getRangeAt(0);range.insertNode(wrap);range.setStartAfter(wrap);range.setEndAfter(wrap);sel.removeAllRanges();sel.addRange(range);}
-    else editor.appendChild(wrap);
-    const p=document.createElement('p');p.innerHTML='<br>';wrap.after(p);
+    if(sel&&sel.rangeCount>0){
+      const range=sel.getRangeAt(0);
+      range.collapse(false);
+      range.insertNode(wrap);
+      // Move cursor after image
+      const newRange=document.createRange();
+      newRange.setStartAfter(wrap);
+      newRange.collapse(true);
+      sel.removeAllRanges();sel.addRange(newRange);
+    } else {
+      editor.appendChild(wrap);
+    }
     updateStats();
   };
   reader.readAsDataURL(file);
@@ -519,18 +602,23 @@ function insertImage(input){
 
 function setImgAlign(btn,align){
   const wrap=btn.closest('.editor-img-wrap');
-  btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{if(['Centre','Gauche','Droite'].includes(b.textContent))b.classList.remove('active');});
+  btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{
+    if(['Centre','Gauche','Droite'].includes(b.textContent))b.classList.remove('active');
+  });
   btn.classList.add('active');
-  if(align==='left'){wrap.style.float='left';wrap.style.margin='0.5em 24px 0.5em 0';wrap.style.textAlign='left';}
-  else if(align==='right'){wrap.style.float='right';wrap.style.margin='0.5em 0 0.5em 24px';wrap.style.textAlign='right';}
-  else{wrap.style.float='none';wrap.style.margin='1.5em auto';wrap.style.textAlign='center';}
+  wrap.classList.remove('align-center','align-left','align-right');
+  if(align==='left') wrap.classList.add('align-left');
+  else if(align==='right') wrap.classList.add('align-right');
+  else wrap.classList.add('align-center');
+  // Reset inline width when switching alignment
+  const cur=wrap.querySelector('img');
+  if(cur) wrap.style.width=cur.style.width||'100%';
 }
 function setImgSize(btn,size){
   const wrap=btn.closest('.editor-img-wrap');
   const img=wrap.querySelector('img');
-  const inner=wrap.querySelector('.img-inner');
-  img.style.width=size;img.style.maxWidth=size;
-  if(inner){inner.style.width=size;inner.style.maxWidth=size;}
+  img.style.width=size;
+  wrap.style.width=size; // constrains the block
   btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{if(['100%','65%','40%'].includes(b.textContent))b.classList.remove('active');});
   btn.classList.add('active');
 }
