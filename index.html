@@ -87,9 +87,9 @@ nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:c
 .modal-overlay.open{display:flex}
 .modal{
   background:var(--cream);
-  border-radius:6px;
-  max-width:1100px;width:100%;
-  max-height:92vh;overflow:hidden;
+  border-radius:4px;
+  max-width:1400px;width:calc(100% - 48px);
+  max-height:95vh;overflow:hidden;
   display:flex;flex-direction:column;
   position:relative;
   box-shadow:0 40px 100px rgba(0,0,0,0.45);
@@ -131,10 +131,7 @@ nav{background:var(--dark);padding:0 48px;height:68px;display:flex;align-items:c
 }
 
 /* Body */
-.modal-body{
-  display:flex;flex:1;
-  overflow:hidden;
-}
+.modal-body{display:none}
 
 /* Sidebar — like editor sidebar */
 .modal-sidebar{
@@ -226,6 +223,36 @@ footer span{color:var(--accent)}
 .modal-content .img-block img,.read-content .img-block img{display:block;width:100%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
 .modal-content .img-toolbar,.read-content .img-toolbar{display:none!important}
 .modal-content .img-caption,.read-content .img-caption{display:block;margin-top:6px;font-family:'Libre Baskerville',serif;font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;color:#999;text-align:center}
+
+/* ── Like bar ── */
+.like-bar{
+  display:flex;align-items:center;gap:16px;
+  padding:14px 44px;
+  border-top:1.5px solid var(--border);
+  background:var(--sidebar-bg, #f2f0ec);
+  flex-shrink:0;
+}
+.like-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 18px;border-radius:8px;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;
+  font-family:'Libre Baskerville',serif;font-size:0.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;color:var(--mid);
+  transition:all 0.22s;
+}
+.like-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.like-btn.liked{background:var(--accent);color:#fff;border-color:var(--accent)}
+.like-btn.disliked{background:#e05555;color:#fff;border-color:#e05555}
+.like-count{font-family:'Libre Baskerville',serif;font-size:0.78rem;color:var(--light);letter-spacing:1px}
+.like-spacer{flex:1}
+.modal-author-info{display:flex;align-items:center;gap:10px}
+.modal-mini-avatar{width:34px;height:34px;border-radius:50%;overflow:hidden;border:2px solid var(--border);flex-shrink:0}
+.modal-mini-avatar img{width:100%;height:100%;object-fit:cover}
+.modal-mini-avatar-ph{width:100%;height:100%;background:var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',serif;font-size:0.9rem;color:#fff}
+.modal-mini-name{font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;color:var(--dark)}
+.modal-mini-role{font-family:'Crimson Text',serif;font-size:0.82rem;font-style:italic;color:var(--light)}
+.modal-mini-link{font-family:'Libre Baskerville',serif;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);display:flex;align-items:center;gap:4px;transition:gap 0.2s}
+.modal-mini-link:hover{gap:7px}
 </style>
 </head>
 <body>
@@ -261,35 +288,41 @@ footer span{color:var(--accent)}
 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
-    <!-- Close -->
     <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <!-- Header -->
     <div class="modal-header">
       <div class="modal-date" id="modalDate"></div>
       <span class="modal-header-ornament">ArticlePress &nbsp;&#9733;&nbsp; Article</span>
     </div>
-    <!-- Body -->
-    <div class="modal-body">
-      <!-- Sidebar -->
-      <div class="modal-sidebar">
-        <div class="modal-sidebar-rule"></div>
-        <div class="modal-avatar-wrap">
-          <img id="modalAvatarImg" class="modal-avatar" src="" alt="" style="display:none">
-          <div class="modal-avatar-placeholder" id="modalAvatarPlaceholder">?</div>
+    <div class="modal-content-wrap" style="flex:1;overflow-y:auto">
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+    <!-- Like bar -->
+    <div class="like-bar">
+      <div class="modal-author-info">
+        <div class="modal-mini-avatar">
+          <img id="modalMiniAvatarImg" src="" style="display:none;width:100%;height:100%;object-fit:cover">
+          <div class="modal-mini-avatar-ph" id="modalMiniAvatarPh">?</div>
         </div>
-        <div class="modal-author" id="modalAuthor"></div>
-        <div class="modal-role" id="modalRole"></div>
-        <a href="#" class="modal-link" id="modalProfileLink">
+        <div>
+          <div class="modal-mini-name" id="modalMiniName"></div>
+          <div class="modal-mini-role" id="modalMiniRole"></div>
+        </div>
+        <a href="#" class="modal-mini-link" id="modalProfileLink">
           Voir le profil
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </div>
-      <!-- Content -->
-      <div class="modal-content-wrap">
-        <div class="modal-content" id="modalContent"></div>
-      </div>
+      <div class="like-spacer"></div>
+      <button class="like-btn" id="likeBtn" onclick="toggleLike('like')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span id="likeCount">0</span>
+      </button>
+      <button class="like-btn" id="dislikeBtn" onclick="toggleLike('dislike')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 14 12 9 7 14"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M5 5H19"/></svg>
+        <span id="dislikeCount">0</span>
+      </button>
     </div>
   </div>
 </div>
@@ -318,6 +351,34 @@ async function initNav(){
 }
 async function logout(){await db.auth.signOut();window.location.reload();}
 initNav();
+
+
+async function toggleLike(type){
+  if(!_currentArticle) return;
+  const id=_currentArticle.id;
+  const key='ap_like_'+id;
+  const prev=localStorage.getItem(key);
+  let likes=parseInt(document.getElementById('likeCount').textContent)||0;
+  let dislikes=parseInt(document.getElementById('dislikeCount').textContent)||0;
+  if(prev===type){
+    // undo
+    localStorage.removeItem(key);
+    if(type==='like') likes=Math.max(0,likes-1);
+    else dislikes=Math.max(0,dislikes-1);
+    document.getElementById('likeBtn').className='like-btn';
+    document.getElementById('dislikeBtn').className='like-btn';
+  } else {
+    if(prev==='like') likes=Math.max(0,likes-1);
+    if(prev==='dislike') dislikes=Math.max(0,dislikes-1);
+    localStorage.setItem(key,type);
+    if(type==='like'){likes++;document.getElementById('likeBtn').className='like-btn liked';document.getElementById('dislikeBtn').className='like-btn';}
+    else{dislikes++;document.getElementById('dislikeBtn').className='like-btn disliked';document.getElementById('likeBtn').className='like-btn';}
+  }
+  document.getElementById('likeCount').textContent=likes;
+  document.getElementById('dislikeCount').textContent=dislikes;
+  // Save to Supabase
+  await db.from('articles').update({likes,dislikes}).eq('id',id);
+}
 
 async function loadArticles(){
   const grid=document.getElementById('articlesGrid');
@@ -360,26 +421,31 @@ function sanitizeArticleHtml(html){
   });
   return div.innerHTML;
 }
+let _currentArticle=null;
 function openArticle(a){
   if(typeof a==='string')a=JSON.parse(a.replace(/&quot;/g,'"'));
+  _currentArticle=a;
   document.getElementById('modalDate').textContent=a.date_display||'';
-  document.getElementById('modalAuthor').textContent=a.author_name||'Auteur';
-  document.getElementById('modalRole').textContent=a.author_title||'';
   const mc=document.getElementById('modalContent');
   if(a.content_html) mc.innerHTML=sanitizeArticleHtml(a.content_html);
   else if(a.content){mc.innerHTML=a.content.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');} else mc.innerHTML='';
-  // Avatar: try author profile pic, fallback to placeholder with initial
-  const img=document.getElementById('modalAvatarImg');
-  const ph=document.getElementById('modalAvatarPlaceholder');
+  // Mini author info in like bar
   const avatarSrc=(a.profiles&&a.profiles.avatar_url)||a.avatar_url||null;
-  if(avatarSrc){
-    img.src=avatarSrc;img.style.display='block';ph.style.display='none';
-  } else {
-    img.style.display='none';ph.style.display='flex';
-    ph.textContent=(a.author_name||'?')[0].toUpperCase();
-  }
-  if(a.profiles&&a.profiles.username)
-    document.getElementById('modalProfileLink').href='profile.html?user='+a.profiles.username;
+  const miniImg=document.getElementById('modalMiniAvatarImg');
+  const miniPh=document.getElementById('modalMiniAvatarPh');
+  if(avatarSrc){miniImg.src=avatarSrc;miniImg.style.display='block';miniPh.style.display='none';}
+  else{miniImg.style.display='none';miniPh.style.display='flex';miniPh.textContent=(a.author_name||'?')[0].toUpperCase();}
+  document.getElementById('modalMiniName').textContent=a.author_name||'';
+  document.getElementById('modalMiniRole').textContent=a.author_title||'';
+  document.getElementById('modalProfileLink').href='profile.html?user='+(a.profiles&&a.profiles.username?a.profiles.username:encodeURIComponent(a.author_name||''));
+  // Likes
+  document.getElementById('likeCount').textContent=a.likes||0;
+  document.getElementById('dislikeCount').textContent=a.dislikes||0;
+  document.getElementById('likeBtn').className='like-btn';
+  document.getElementById('dislikeBtn').className='like-btn';
+  const userLike=localStorage.getItem('ap_like_'+a.id);
+  if(userLike==='like') document.getElementById('likeBtn').className='like-btn liked';
+  if(userLike==='dislike') document.getElementById('dislikeBtn').className='like-btn disliked';
   else
     document.getElementById('modalProfileLink').href='profile.html?user='+encodeURIComponent(a.author_name||'');
   document.getElementById('modalOverlay').classList.add('open');
