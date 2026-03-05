@@ -289,6 +289,16 @@ footer span{color:var(--accent)}
 .read-content img{max-width:100%;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,0.1);margin:1em 0}
 .read-content a{color:var(--accent);text-decoration:underline}
 .read-content hr{border:none;border-top:2px solid var(--border);margin:2em 0}
+
+/* Hide editor-only elements in read modals */
+.modal-content .img-toolbar,
+.modal-content .img-resize-handle,
+.read-content .img-toolbar,
+.read-content .img-resize-handle{display:none!important}
+.modal-content .editor-img-wrap,
+.read-content .editor-img-wrap{cursor:default!important}
+.modal-content .img-inner,
+.read-content .img-inner{display:flex!important;flex-direction:column;align-items:center;width:100%}
 </style>
 </head>
 <body>
@@ -563,13 +573,24 @@ async function saveProfile(){
   else{showToast('Profil mis à jour !','success');setTimeout(()=>window.location.href='profile.html?user='+uname,900);}
 }
 
+
+function sanitizeArticleHtml(html){
+  const div=document.createElement('div');
+  div.innerHTML=html;
+  div.querySelectorAll('.img-toolbar,.img-resize-handle').forEach(el=>el.remove());
+  div.querySelectorAll('.editor-img-wrap').forEach(wrap=>{
+    wrap.removeAttribute('onclick');
+    wrap.classList.remove('selected');
+  });
+  return div.innerHTML;
+}
 function openArticleRead(a){
   document.getElementById('readDate').textContent=a.date_display||'';
   document.getElementById('readAuthor').textContent=a.author_name||'';
   document.getElementById('readRole').textContent=a.author_title||'';
   // Content — prefer rich HTML
   const content=document.getElementById('readContent');
-  if(a.content_html) content.innerHTML=a.content_html;
+  if(a.content_html) content.innerHTML=sanitizeArticleHtml(a.content_html);
   else{content.innerHTML='';const p=document.createElement('p');p.textContent=a.content||'';content.appendChild(p);}
   // Avatar
   const img=document.getElementById('readAvatarImg');
