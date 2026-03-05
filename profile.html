@@ -311,6 +311,12 @@ footer span{color:var(--accent)}
 .modal-content .img-block img,.read-content .img-block img{display:block;width:100%;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
 .modal-content .img-toolbar,.read-content .img-toolbar{display:none!important}
 .modal-content .img-caption,.read-content .img-caption{display:block;margin-top:6px;font-family:'Libre Baskerville',serif;font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;color:#999;text-align:center}
+
+.read-like-bar{display:flex;align-items:center;gap:14px;padding:12px 28px;border-top:1.5px solid var(--border);background:#f2f0ec;flex-shrink:0}
+.read-like-btn{display:flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mid);transition:all 0.2s}
+.read-like-btn:hover{border-color:var(--accent);color:var(--accent)}
+.read-like-btn.liked{background:var(--accent);color:#fff;border-color:var(--accent)}
+.read-like-btn.disliked{background:#e05555;color:#fff;border-color:#e05555}
 </style>
 </head>
 <body>
@@ -399,6 +405,16 @@ footer span{color:var(--accent)}
       <div class="read-content-wrap">
         <div class="read-content" id="readContent"></div>
       </div>
+    </div>
+    <div class="read-like-bar">
+      <button class="read-like-btn" id="readLikeBtn" onclick="toggleReadLike('like')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span id="readLikeCount">0</span>
+      </button>
+      <button class="read-like-btn" id="readDislikeBtn" onclick="toggleReadLike('dislike')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 14 12 9 7 14"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M5 5H19"/></svg>
+        <span id="readDislikeCount">0</span>
+      </button>
     </div>
   </div>
 </div>
@@ -611,9 +627,32 @@ function openArticleRead(a){
   const readAvSrc=(a.profiles&&a.profiles.avatar_url)||a.image_data||null;
   if(readAvSrc){img.src=readAvSrc;img.style.display='block';ph.style.display='none';}
   else{img.style.display='none';ph.style.display='flex';ph.textContent=(a.author_name||'?')[0].toUpperCase();}
-  document.getElementById('readProfileLink').href='profile.html?user='+encodeURIComponent(a.author_name||'');
+  const profileLinkEl=document.getElementById('readProfileLink');
+  profileLinkEl.href='profile.html?user='+encodeURIComponent(a.author_name||'');
+  // Hide "voir le profil" if already on this person's profile page
+  profileLinkEl.style.display=isOwn?'none':'inline-flex';
   document.getElementById('readOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  // Likes
+  document.getElementById('readLikeCount').textContent=a.likes||0;
+  document.getElementById('readDislikeCount').textContent=a.dislikes||0;
+  document.getElementById('readLikeBtn').className='read-like-btn';
+  document.getElementById('readDislikeBtn').className='read-like-btn';
+  const ul=localStorage.getItem('ap_like_'+a.id);
+  if(ul==='like') document.getElementById('readLikeBtn').className='read-like-btn liked';
+  if(ul==='dislike') document.getElementById('readDislikeBtn').className='read-like-btn disliked';
+  window._readArticle=a;
+}
+async function toggleReadLike(type){
+  const a=window._readArticle; if(!a)return;
+  const key='ap_like_'+a.id;const prev=localStorage.getItem(key);
+  let likes=parseInt(document.getElementById('readLikeCount').textContent)||0;
+  let dislikes=parseInt(document.getElementById('readDislikeCount').textContent)||0;
+  if(prev===type){localStorage.removeItem(key);if(type==='like')likes=Math.max(0,likes-1);else dislikes=Math.max(0,dislikes-1);document.getElementById('readLikeBtn').className='read-like-btn';document.getElementById('readDislikeBtn').className='read-like-btn';}
+  else{if(prev==='like')likes=Math.max(0,likes-1);if(prev==='dislike')dislikes=Math.max(0,dislikes-1);localStorage.setItem(key,type);if(type==='like'){likes++;document.getElementById('readLikeBtn').className='read-like-btn liked';document.getElementById('readDislikeBtn').className='read-like-btn';}else{dislikes++;document.getElementById('readDislikeBtn').className='read-like-btn disliked';document.getElementById('readLikeBtn').className='read-like-btn';}}
+  document.getElementById('readLikeCount').textContent=likes;
+  document.getElementById('readDislikeCount').textContent=dislikes;
+  await db.from('articles').update({likes,dislikes}).eq('id',a.id);
 }
 function closeReadModal(){
   document.getElementById('readOverlay').classList.remove('open');
