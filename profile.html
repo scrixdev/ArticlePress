@@ -624,18 +624,10 @@ function sanitizeArticleHtml(html){
 }
 function openArticleRead(a){
   document.getElementById('readDate').textContent=a.date_display||'';
-  document.getElementById('readAuthor').textContent=a.author_name||'';
-  document.getElementById('readRole').textContent=a.author_title||'';
   // Content — prefer rich HTML
   const content=document.getElementById('readContent');
   if(a.content_html) content.innerHTML=sanitizeArticleHtml(a.content_html);
   else if(a.content){content.innerHTML=a.content.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');} else content.innerHTML='';
-  // Avatar
-  const img=document.getElementById('readAvatarImg');
-  const ph=document.getElementById('readAvatarPh');
-  const readAvSrc=(a.profiles&&a.profiles.avatar_url)||a.image_data||null;
-  if(readAvSrc){img.src=readAvSrc;img.style.display='block';ph.style.display='none';}
-  else{img.style.display='none';ph.style.display='flex';ph.textContent=(a.author_name||'?')[0].toUpperCase();}
   // Mini author in like bar
   const readMiniImg=document.getElementById('readMiniAvatarImg');
   const readMiniPh=document.getElementById('readMiniAvatarPh');
