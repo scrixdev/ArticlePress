@@ -174,6 +174,11 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
 .img-tb-btn:hover{background:rgba(255,255,255,0.1);color:#fff}
 .img-tb-btn.active{background:var(--accent);color:#fff}
 .img-tb-sep{width:1px;height:16px;background:rgba(255,255,255,0.12);margin:0 3px}
+.img-size-input{height:28px;width:52px;padding:0 6px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);font-family:'Libre Baskerville',serif;font-size:0.68rem;font-weight:700;text-align:center;outline:none;transition:all 0.15s;-moz-appearance:textfield}
+.img-size-input::-webkit-inner-spin-button,.img-size-input::-webkit-outer-spin-button{-webkit-appearance:none}
+.img-size-input:focus{border-color:var(--accent);background:rgba(255,255,255,0.12);color:#fff}
+.img-size-input::placeholder{color:rgba(255,255,255,0.28)}
+.img-size-label{color:rgba(255,255,255,0.35);font-family:'Libre Baskerville',serif;font-size:0.62rem;letter-spacing:0.5px;margin-left:1px}
 /* Caption — always below image, same width */
 .img-caption{
   display:block;width:100%;
@@ -560,6 +565,8 @@ function makeImgBlock(src){
       <button class="img-tb-btn active" onclick="setSize(this,'100')">100%</button>
       <button class="img-tb-btn" onclick="setSize(this,'65')">65%</button>
       <button class="img-tb-btn" onclick="setSize(this,'40')">40%</button>
+      <input type="number" class="img-size-input" min="5" max="100" placeholder="%" title="Taille personnalisée (ex: 75)" onchange="setCustomSize(this)" onkeydown="if(event.key==='Enter'){setCustomSize(this);this.blur()}" onclick="event.stopPropagation()">
+      <span class="img-size-label">%</span>
       <div class="img-tb-sep"></div>
       <button class="img-tb-btn" onclick="removeImg(this)" style="color:#e05555">✕</button>
     </div>
@@ -616,12 +623,27 @@ function setAlign(btn, align){
 }
 function setSize(btn, size){
   const block=btn.closest('.img-block');
-  btn.closest('.img-toolbar').querySelectorAll('.img-tb-btn').forEach(b=>{
+  const toolbar=btn.closest('.img-toolbar');
+  toolbar.querySelectorAll('.img-tb-btn').forEach(b=>{
     if(['100%','65%','40%'].includes(b.textContent.trim())) b.classList.remove('active');
   });
   btn.classList.add('active');
   block.classList.remove('size-100','size-65','size-40');
   block.classList.add('size-'+size);
+  block.style.width='';
+  const customInput=toolbar.querySelector('.img-size-input');
+  if(customInput) customInput.value='';
+}
+function setCustomSize(input){
+  const val=parseInt(input.value);
+  if(!val||val<5||val>100){input.value='';return;}
+  const block=input.closest('.img-block');
+  const toolbar=input.closest('.img-toolbar');
+  toolbar.querySelectorAll('.img-tb-btn').forEach(b=>{
+    if(['100%','65%','40%'].includes(b.textContent.trim())) b.classList.remove('active');
+  });
+  block.classList.remove('size-100','size-65','size-40');
+  block.style.width=val+'%';
 }
 function removeImg(btn){
   const block=btn.closest('.img-block');
