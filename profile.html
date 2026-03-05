@@ -263,7 +263,7 @@ footer span{color:var(--accent)}
 /* ══ ARTICLE READ MODAL ══ */
 .read-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)}
 .read-overlay.open{display:flex}
-.read-modal{background:var(--cream);border-radius:6px;max-width:1100px;width:100%;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 40px 100px rgba(0,0,0,0.45);animation:fadeUp 0.42s cubic-bezier(.22,.68,0,1.2) both}
+.read-modal{background:var(--cream);border-radius:4px;max-width:860px;width:calc(100% - 48px);max-height:95vh;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 40px 100px rgba(0,0,0,0.45);animation:riseUp 0.42s cubic-bezier(.22,.68,0,1.2) both}
 .read-modal-close{position:absolute;top:50%;right:18px;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);width:32px;height:32px;border-radius:50%;cursor:pointer;color:#fff;z-index:10;transition:all 0.22s;display:flex;align-items:center;justify-content:center}
 .read-modal-close:hover{background:rgba(255,255,255,0.22);transform:translateY(-50%) scale(1.08)}
 .read-modal-header{background:var(--dark);padding:20px 60px 20px 40px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;position:relative}
@@ -412,7 +412,7 @@ footer span{color:var(--accent)}
         <span id="readLikeCount">0</span>
       </button>
       <button class="read-like-btn" id="readDislikeBtn" onclick="toggleReadLike('dislike')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 14 12 9 7 14"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M5 5H19"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
         <span id="readDislikeCount">0</span>
       </button>
     </div>
