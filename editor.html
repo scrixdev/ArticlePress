@@ -145,11 +145,9 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
   outline:2.5px solid var(--accent);
   box-shadow:0 6px 28px rgba(200,169,110,0.3);
 }
-/* Toolbar — floats above on select */
+/* Toolbar — fixed above selected image, repositioned by JS */
 .img-toolbar{
-  position:absolute;
-  top:-46px;left:50%;
-  transform:translateX(-50%);
+  position:fixed;
   background:#1a1a1a;
   border-radius:10px;
   padding:6px 10px;
@@ -157,8 +155,9 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
   align-items:center;gap:4px;
   box-shadow:0 6px 24px rgba(0,0,0,0.4);
   white-space:nowrap;
-  z-index:100;
+  z-index:9999;
   border:1px solid rgba(255,255,255,0.08);
+  pointer-events:auto;
 }
 .img-block.selected .img-toolbar{display:flex}
 .img-tb-btn{
@@ -543,11 +542,50 @@ function attachImgEvents(block){
     e.preventDefault();
     deselectAllImgs();
     block.classList.add('selected');
+    positionToolbar(block);
   });
 }
-function deselectAllImgs(){
-  document.querySelectorAll('.img-block').forEach(b=>b.classList.remove('selected'));
+function positionToolbar(block){
+  const toolbar=block.querySelector('.img-toolbar');
+  if(!toolbar)return;
+  requestAnimationFrame(()=>{
+    const br=block.getBoundingClientRect();
+    const tw=toolbar.offsetWidth||320;
+    const th=toolbar.offsetHeight||40;
+    const margin=8;
+    let left=br.left+br.width/2-tw/2;
+    let top=br.top-th-10;
+    left=Math.max(margin,Math.min(left,window.innerWidth-tw-margin));
+    if(top<66)top=br.bottom+10; /* below nav if not enough room above */
+    toolbar.style.left=left+'px';
+    toolbar.style.top=top+'px';
+  });
 }
+function moveImgTop(btn){
+  const block=btn.closest('.img-block');
+  const editor=document.getElementById('articleEditor');
+  if(editor.firstChild===block)return;
+  editor.insertBefore(block,editor.firstChild);
+  const after=document.createElement('p');after.innerHTML='<br>';
+  editor.insertBefore(after,block.nextSibling);
+  positionToolbar(block);
+  updateStats();
+}
+function deselectAllImgs(){
+  document.querySelectorAll('.img-block').forEach(b=>{
+    b.classList.remove('selected');
+    const t=b.querySelector('.img-toolbar');
+    if(t){t.style.left='';t.style.top='';}
+  });
+}
+document.addEventListener('scroll',()=>{
+  const sel=document.querySelector('.img-block.selected');
+  if(sel) positionToolbar(sel);
+},true);
+window.addEventListener('resize',()=>{
+  const sel=document.querySelector('.img-block.selected');
+  if(sel) positionToolbar(sel);
+});
 document.addEventListener('mousedown',e=>{
   if(!e.target.closest('.img-block')) deselectAllImgs();
 });
@@ -558,6 +596,8 @@ function makeImgBlock(src){
   block.contentEditable='false';
   block.innerHTML=`
     <div class="img-toolbar">
+      <button class="img-tb-btn" onclick="moveImgTop(this)" title="Déplacer en haut de l'article"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/><line x1="4" y1="3" x2="20" y2="3"/></svg>Haut</button>
+      <div class="img-tb-sep"></div>
       <button class="img-tb-btn active" onclick="setAlign(this,'center')" title="Centrer">Centre</button>
       <button class="img-tb-btn" onclick="setAlign(this,'left')" title="Gauche">Gauche</button>
       <button class="img-tb-btn" onclick="setAlign(this,'right')" title="Droite">Droite</button>
