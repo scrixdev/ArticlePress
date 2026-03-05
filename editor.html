@@ -592,7 +592,19 @@ function closeDraftModal(resume){
 async function publishArticle(){
   if(!currentUser)return;
   const editor=document.getElementById('articleEditor');
-  const contentHtml=editor.innerHTML.trim();
+  // Clone editor content and strip toolbar elements before saving
+  const clone=editor.cloneNode(true);
+  clone.querySelectorAll('.img-toolbar,.img-resize-handle').forEach(el=>el.remove());
+  // Unwrap img-inner but keep img and caption
+  clone.querySelectorAll('.img-inner').forEach(inner=>{
+    const parent=inner.closest('.editor-img-wrap');
+    if(parent){
+      // Move img and caption out to wrap level
+      inner.querySelectorAll('img,.img-caption').forEach(el=>parent.insertBefore(el,inner));
+      inner.remove();
+    }
+  });
+  const contentHtml=clone.innerHTML.trim();
   const contentText=editor.innerText.trim();
   if(!contentText)return showToast('Écris quelque chose avant de publier.','error');
   const btn=document.getElementById('publishBtn');btn.disabled=true;btn.textContent='Publication...';
