@@ -251,6 +251,10 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
   .article-editor{padding:20px!important;min-height:auto}
   .author-input,.role-input{border-color:transparent!important}
 }
+
+/* PDF print window styles */
+.pdf-print-btn{display:inline-flex;align-items:center;gap:8px;background:#0f0f0f;color:#fff;border:none;border-radius:8px;padding:11px 26px;font-family:'Libre Baskerville',serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.22s;margin-right:10px}
+.pdf-print-btn:hover{background:#333;transform:translateY(-1px)}
 @media(max-width:760px){
   nav{padding:0 16px}
   .nav-actions{position:static;transform:none;gap:5px}
@@ -269,7 +273,7 @@ nav{background:var(--dark);padding:0 48px;height:66px;display:flex;align-items:c
     <button class="btn-action btn-save" onclick="saveDraft()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Sauvegarder
     </button>
-    <button class="btn-action btn-pdf" onclick="window.print()">
+    <button class="btn-action btn-pdf" onclick="generatePDF()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PDF
     </button>
     <button class="btn-action btn-publish" id="publishBtn" onclick="publishArticle()">
@@ -763,6 +767,192 @@ async function publishArticle(){
   else{setStatus('Publié !','saved');showToast(publishedId?'Article mis à jour !':'Article publié !','success');localStorage.removeItem('ap_draft_v2');btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Mettre à jour';}
   btn.disabled=false;
 }
+function generatePDF(){
+  // Collect data from editor
+  const dateVal = document.getElementById('dateInput').value || '';
+  const authorName = document.getElementById('authorName').value || 'Auteur';
+  const authorTitle = document.getElementById('authorTitle').value || '';
+  const profileSrc = document.getElementById('profileImg').src || '';
+
+  // Clone editor and strip UI elements
+  const editorEl = document.getElementById('articleEditor');
+  const clone = editorEl.cloneNode(true);
+  clone.querySelectorAll('.img-toolbar').forEach(el => el.remove());
+  clone.querySelectorAll('.img-block').forEach(b => b.classList.remove('selected'));
+  const contentHtml = clone.innerHTML;
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${authorName} — ArticlePress</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--dark:#0f0f0f;--mid:#4a4a4a;--light:#999;--cream:#f7f5f2;--white:#ffffff;--accent:#c8a96e;--accent-dark:#a8893e;--border:#e2dfd9;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Crimson Text',serif;background:var(--white);color:var(--dark);line-height:1.6}
+
+/* PRINT TOOLBAR */
+.print-toolbar{position:fixed;top:0;left:0;right:0;height:54px;background:var(--dark);display:flex;align-items:center;justify-content:space-between;padding:0 36px;z-index:999;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.pt-logo{font-family:'Libre Baskerville',serif;font-size:1.1rem;color:#fff;letter-spacing:1.5px}
+.pt-logo span{color:var(--accent)}
+.pt-actions{display:flex;gap:10px}
+.pt-btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:7px;padding:9px 22px;font-family:'Libre Baskerville',serif;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s}
+.pt-btn-print{background:var(--accent);color:#fff}
+.pt-btn-print:hover{background:var(--accent-dark);transform:translateY(-1px)}
+.pt-btn-close{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.12)}
+.pt-btn-close:hover{background:rgba(255,255,255,0.15);color:#fff}
+
+/* PAGE */
+.page{margin:70px auto 40px;max-width:860px;background:var(--white);border-radius:4px;box-shadow:0 8px 50px rgba(0,0,0,0.1);display:flex;flex-direction:column}
+
+/* HEADER */
+.art-header{background:var(--dark);padding:18px 40px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.art-date{font-family:'Libre Baskerville',serif;font-size:0.88rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.7)}
+.art-ornament{color:var(--accent);font-family:'Libre Baskerville',serif;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;opacity:0.7}
+
+/* BODY LAYOUT — mirrors the editor exactly */
+.art-body{display:flex;flex:1;align-items:stretch}
+
+/* SIDEBAR — same as .sidebar in editor */
+.art-sidebar{
+  flex:0 0 230px;
+  width:230px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;
+  padding:32px 22px 24px;
+  border-right:1.5px solid var(--border);
+  background:#f2f0ec;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  align-self:stretch;
+}
+.art-sidebar-rule{width:38px;height:2px;background:var(--accent);border-radius:2px;opacity:0.55}
+.art-photo{
+  width:140px;height:140px;
+  border-radius:50%;object-fit:cover;
+  border:3px solid var(--border);
+  display:block;flex-shrink:0;
+}
+.art-author-name{
+  font-family:'Libre Baskerville',serif;font-weight:700;
+  font-size:0.92rem;text-align:center;color:var(--dark);
+  border:2px solid var(--border);border-radius:5px;
+  padding:9px 12px;width:100%;background:var(--white);
+}
+.art-author-title{
+  font-family:'Crimson Text',serif;font-style:italic;
+  font-size:0.92rem;text-align:center;color:var(--mid);
+  border:2px solid var(--border);border-radius:5px;
+  padding:8px 12px;width:100%;background:var(--white);
+}
+.art-sidebar-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.art-sidebar-tag{
+  margin-top:auto;
+  font-family:'Libre Baskerville',serif;font-size:0.6rem;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--accent);opacity:0.55;text-align:center;
+}
+
+/* CONTENT — same as .article-editor */
+.art-content{
+  flex:1;
+  padding:44px 52px;
+  font-family:'Crimson Text',serif;font-size:1.18rem;line-height:2;
+  color:var(--dark);
+  min-width:0;
+}
+.art-content p{margin-bottom:0.8em}
+.art-content h1{font-family:'Libre Baskerville',serif;font-size:2rem;font-weight:700;line-height:1.25;margin:1.2em 0 0.5em}
+.art-content h2{font-family:'Libre Baskerville',serif;font-size:1.55rem;font-weight:700;line-height:1.3;margin:1.1em 0 0.4em}
+.art-content h3{font-family:'Libre Baskerville',serif;font-size:1.25rem;font-weight:700;line-height:1.35;margin:1em 0 0.4em}
+.art-content blockquote{border-left:4px solid var(--accent);padding:12px 24px;margin:1.4em 0;background:rgba(200,169,110,0.06);border-radius:0 8px 8px 0;color:var(--mid);font-style:italic;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.art-content ul,.art-content ol{padding-left:2em;margin:0.8em 0}
+.art-content li{margin-bottom:0.3em}
+.art-content a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.art-content hr{border:none;border-top:2px solid var(--border);margin:2em 0}
+.art-content code{background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:monospace;font-size:0.9em}
+.art-content pre{background:#1a1a1a;color:#e8e6e3;border-radius:8px;padding:20px 24px;margin:1.2em 0;overflow-x:auto;font-family:monospace;font-size:0.9rem;line-height:1.6;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+/* Image blocks from editor */
+.img-block{display:block;width:100%;margin:1.4em 0;clear:both;position:relative}
+.img-block.size-65{width:65%}
+.img-block.size-40{width:40%}
+.img-block.align-center{margin-left:auto;margin-right:auto;float:none}
+.img-block.align-left{float:left;margin-right:24px;margin-left:0}
+.img-block.align-right{float:right;margin-left:24px;margin-right:0}
+.img-block img{display:block;width:100%;height:auto;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.art-content::after{content:'';display:table;clear:both}
+.img-caption{display:block;width:100%;margin-top:7px;font-family:'Libre Baskerville',serif;font-size:0.7rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);text-align:center}
+
+/* FOOTER */
+.art-footer{background:var(--dark);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.art-footer-left{font-family:'Libre Baskerville',serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35)}
+.art-footer-center{font-family:'Libre Baskerville',serif;font-size:0.68rem;color:var(--accent);letter-spacing:1px;opacity:0.7}
+.art-footer-right{font-family:'Libre Baskerville',serif;font-size:0.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3)}
+
+@media print{
+  @page{margin:0;size:A4 portrait}
+  html,body{width:210mm}
+  .print-toolbar{display:none!important}
+  .page{margin:0;max-width:none;border-radius:0;box-shadow:none;min-height:297mm}
+  .art-header,.art-sidebar,.art-footer,.art-content blockquote,.art-content pre{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+    color-adjust:exact!important;
+  }
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="print-toolbar">
+  <div class="pt-logo">Article<span>Press</span></div>
+  <div class="pt-actions">
+    <button class="pt-btn pt-btn-print" onclick="window.print()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Imprimer / Enregistrer PDF
+    </button>
+    <button class="pt-btn pt-btn-close" onclick="window.close()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Fermer
+    </button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="art-header">
+    <span class="art-date">${dateVal}</span>
+    <span class="art-ornament">ArticlePress &nbsp;&#10022;&nbsp; Éditeur Pro</span>
+  </div>
+
+  <div class="art-body">
+    <div class="art-sidebar">
+      <div class="art-sidebar-rule"></div>
+      <img class="art-photo" src="${profileSrc}" alt="${authorName}">
+      <div class="art-sidebar-divider"></div>
+      <div class="art-author-name">${authorName}</div>
+      ${authorTitle ? `<div class="art-author-title">${authorTitle}</div>` : ''}
+      <div class="art-sidebar-tag">Auteur · ArticlePress</div>
+    </div>
+
+    <div class="art-content">${contentHtml}</div>
+  </div>
+
+  <div class="art-footer">
+    <span class="art-footer-left">ArticlePress</span>
+    <span class="art-footer-center">&#10022;</span>
+    <span class="art-footer-right">${dateVal}</span>
+  </div>
+</div>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) { showToast('Autorisez les popups pour générer le PDF', 'error'); return; }
+  win.document.write(html);
+  win.document.close();
+}
+
 init();
 </script>
 </body>
